@@ -1,0 +1,13 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+io.github.joselion.pretty-jupiter:io.github.joselion.pretty-jupiter.gradle.plugin:2.0.1=classpath
+io.github.joselion.strict-null-check:io.github.joselion.strict-null-check.gradle.plugin:2.0.0=classpath
+io.github.joselion:pretty-jupiter:2.0.1=classpath
+io.github.joselion:strict-null-check:2.0.0=classpath
+org.apache.commons:commons-lang3:3.11=classpath
+org.apache.commons:commons-text:1.9=classpath
+org.sonarsource.sonarlint.core:sonarlint-core:8.0.2.42487=classpath
+se.solrike.sonarlint:se.solrike.sonarlint.gradle.plugin:1.0.0-beta.4=classpath
+se.solrike.sonarlint:sonarlint-gradle-plugin:1.0.0-beta.4=classpath
+empty=

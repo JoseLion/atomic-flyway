@@ -1,0 +1,53 @@
+buildscript {
+  configurations.classpath {
+    resolutionStrategy.activateDependencyLocking()
+  }
+}
+
+plugins {
+  id 'checkstyle'
+  id 'java-library'
+
+  id 'io.github.joselion.pretty-jupiter' version '2.0.1'
+  id 'io.github.joselion.strict-null-check' version '2.0.0'
+  id 'se.solrike.sonarlint' version '1.0.0-beta.4'
+}
+
+group = 'io.github.joselion'
+version = '1.0.0-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_18
+targetCompatibility = JavaVersion.VERSION_18
+
+dependencyLocking {
+  lockAllConfigurations()
+}
+
+checkstyle {
+  setToolVersion('10.2')
+}
+
+sonarlint {
+  excludeRules = [
+    'java:S4032', // Allow packages only containing `package-info.java`
+    'java:S107' // Allow constructors with more than 7 parameters
+  ]
+  includeRules = [
+    'java:S4266' // "Stream.collect()" calls should not be redundant
+  ]
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testImplementation('org.assertj:assertj-core:3.22.0')
+}
+
+testing {
+  suites {
+    test {
+      useJUnitJupiter('5.8.2')
+    }
+  }
+}
