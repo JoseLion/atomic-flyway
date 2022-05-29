@@ -15,8 +15,13 @@ plugins {
 
 group = 'io.github.joselion'
 version = '1.0.0-SNAPSHOT'
-sourceCompatibility = JavaVersion.VERSION_18
-targetCompatibility = JavaVersion.VERSION_18
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(18)
+    vendor = JvmVendorSpec.ORACLE
+  }
+}
 
 dependencyLocking {
   lockAllConfigurations()
