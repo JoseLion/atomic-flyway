@@ -45,8 +45,16 @@ repositories {
   mavenCentral()
 }
 
+def flywayVersion = '8.5.11'
+
 dependencies {
+  compileOnly("org.flywaydb:flyway-core:$flywayVersion")
+
+  implementation('com.github.joselion:maybe:2.1.0')
+
   testImplementation('org.assertj:assertj-core:3.22.0')
+  testImplementation("org.flywaydb:flyway-core:$flywayVersion")
+  testImplementation('org.mockito:mockito-core:4.6.0')
 }
 
 testing {
