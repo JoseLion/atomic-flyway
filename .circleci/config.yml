@@ -1,0 +1,67 @@
+version: 2.1
+
+executors:
+  default:
+    working_directory: ~/repo/atomic-flyway
+
+    docker:
+      - image: cimg/base:stable
+        environment:
+          JVM_OPTS: -Xmx4096m
+          TERM: dumb
+
+commands:
+  setup:
+    description: Setup the project environment
+
+    steps:
+      - checkout:
+          path: ~/repo
+
+      - restore_cache:
+          keys:
+            - v1-gradle-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
+            - v1-gradle-{{ checksum "buildscript-gradle.lockfile" }}-
+            - v1-gradle-
+
+      - run:
+          name: Dependencies
+          command: ./gradlew dependencies
+
+      - save_cache:
+          paths:
+            - ~/repo/atomic-flyway/.gradle
+            - ~/.gradle
+          key: v1-gradle-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
+
+jobs:
+  build:
+    executor: default
+
+    steps:
+      - setup
+
+      - run:
+          name: Compile
+          command: ./gradlew compileJava compileTestJava
+
+      - run:
+          name: SonarLint
+          command: ./gradlew sonarlintMain sonarlintTest
+
+      - run:
+          name: Checkstyle
+          command: ./gradlew checkstyleMain checkstyleTest
+
+      - run:
+          name: Test
+          command: ./gradlew test
+
+      - run:
+          name: Build
+          command:  ./gradlew build
+
+workflows:
+  main:
+    jobs:
+      - build
