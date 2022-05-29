@@ -16,7 +16,7 @@ commands:
 
     steps:
       - checkout:
-          path: ~/repo
+          path: ~/repo/atomic-flyway
 
       - restore_cache:
           keys:
