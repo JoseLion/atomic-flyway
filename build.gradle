@@ -51,16 +51,25 @@ dependencies {
   compileOnly("org.flywaydb:flyway-core:$flywayVersion")
 
   implementation('com.github.joselion:maybe:2.1.0')
+  implementation('info.picocli:picocli:4.6.3')
 
   testImplementation('org.assertj:assertj-core:3.22.0')
   testImplementation("org.flywaydb:flyway-core:$flywayVersion")
-  testImplementation('org.mockito:mockito-core:4.6.0')
+  testImplementation('org.jmockit:jmockit:1.49')
 }
 
 testing {
   suites {
     test {
       useJUnitJupiter('5.8.2')
+
+      targets {
+        all {
+          testTask.configure {
+            jvmArgs("-javaagent:${classpath.find { it.name.contains("jmockit") }.absolutePath}")
+          }
+        }
+      }
     }
   }
 }
