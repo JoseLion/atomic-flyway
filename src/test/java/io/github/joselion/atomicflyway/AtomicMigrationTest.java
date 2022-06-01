@@ -2,10 +2,6 @@ package io.github.joselion.atomicflyway;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +14,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import io.github.joselion.testing.annotations.UnitTest;
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.Verifications;
 
 @UnitTest class AtomicMigrationTest {
 
@@ -82,32 +81,39 @@ import io.github.joselion.testing.annotations.UnitTest;
 
   @Nested class migrate {
     @Nested class when_the_SQL_statement_can_be_executed {
-      @Test void executes_the_statement_with_the_up_migration() throws Exception {
-        final var connection = mock(Connection.class);
-        final var preparedStatement = mock(PreparedStatement.class);
-        final var context = mock(Context.class);
+      @Test void executes_the_statement_with_the_up_migration(
+        final @Mocked Connection connection,
+        final @Mocked PreparedStatement preparedStatement,
+        final @Mocked Context context
+      ) throws Exception {
+        new Expectations() {{
+          preparedStatement.execute(); result = true;
+          connection.prepareStatement(anyString); result = preparedStatement;
+          context.getConnection(); result = connection;
+        }};
+
         final var migration = new V001TestMigration();
-
-        when(preparedStatement.execute()).thenReturn(true);
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(context.getConnection()).thenReturn(connection);
-
         migration.migrate(context);
 
-        verify(connection).prepareStatement("Migration up");
+        new Verifications() {{
+          connection.prepareStatement("Migration up"); times = 1;
+        }};
       }
     }
 
     @Nested class and_the_sql_statement_is_cannot_be_executed {
-      @Test void raises_a_SQLException() throws Exception {
-        final var preparedStatement = mock(PreparedStatement.class);
-        final var connection = mock(Connection.class);
-        final var context = mock(Context.class);
-        final var migration = new V001TestMigration();
+      @Test void raises_a_SQLException(
+        final @Mocked Connection connection,
+        final @Mocked PreparedStatement preparedStatement,
+        final @Mocked Context context
+      ) throws Exception {
+        new Expectations() {{
+          preparedStatement.execute(); result = new SQLException("Bad SQL statement!");
+          connection.prepareStatement(anyString); result = preparedStatement;
+          context.getConnection(); result = connection;
+        }};
 
-        when(preparedStatement.execute()).thenThrow(new SQLException("Bad SQL statement!"));
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(context.getConnection()).thenReturn(connection);
+        final var migration = new V001TestMigration();
 
         assertThatThrownBy(() -> migration.migrate(context))
           .isExactlyInstanceOf(SQLException.class)
