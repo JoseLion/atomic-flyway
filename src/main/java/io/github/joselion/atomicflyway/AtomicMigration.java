@@ -13,14 +13,45 @@ import org.flywaydb.core.api.MigrationVersion;
 import org.flywaydb.core.api.migration.Context;
 import org.flywaydb.core.api.migration.JavaMigration;
 
+/**
+ * The AtomicMigration contract allows the creating of Flyway Java-based atomic
+ * migrations by implementing the {@code up()} and {@code down} methods.
+ * 
+ * @author Jose Luis Leon
+ * @since v1.0.0
+ */
 public interface AtomicMigration extends JavaMigration {
 
+  /**
+   * Versioned migrations class name pattern
+   */
   Pattern VERSIONED_PATTERN = Pattern.compile("^(V)([0-9]*)(__)?([A-Z]\\w*)$");
 
+  /**
+   * Repeatable migrations class name pattern
+   */
   Pattern REPEATABLE_PATTERN = Pattern.compile("^(R)([0-9]*)(__)?([A-Z]\\w*)$");
 
+  /**
+   * The {@code up} migration that will run whith the {@code migrate} command.
+   * 
+   * @apiNote by default, the SQL is executed within a transaction, unless the
+   * {@link JavaMigration#canExecuteInTransaction()} method is overriden.
+   *
+   * @return a raw string of the SQL to run during upon migration
+   */
   String up();
 
+  /**
+   * The {@code down} migration that will run with the {@code undo-migration}
+   * command. Typically, this scripts should effectively revert everything in
+   * the {@code up} migration.
+   * 
+   * @apiNote by default, the SQL is executed within a transaction, unless the
+   * {@link JavaMigration#canExecuteInTransaction()} method is overriden.
+   *
+   * @return a raw string of the SQL to run upon reverting the migration
+   */
   String down();
 
   @Override
@@ -69,6 +100,20 @@ public interface AtomicMigration extends JavaMigration {
       .orThrow();
   }
 
+  /**
+   * Helper method that allows matching on the Java-based migration class names
+   * to extract their parts. You can override this method if you're having
+   * trouble with the migrations class naming convention. The regular
+   * expression matcher should consist of 4 groups:
+   *
+   * <ol>
+   *   <li>The prefix {@code V} for versioned, or {@code R} for repeatable</li>
+   *   <li>The version number</li>
+   *   <li>An optional separator (default is {@code __})</li>
+   *   <li>The script name</li>
+   * </ol>
+   * @return a regex matcher for the migration class name
+   */
   default Matcher nameMatcher() {
     final var className = getClass().getSimpleName();
     final var versionedMatcher = VERSIONED_PATTERN.matcher(className);
