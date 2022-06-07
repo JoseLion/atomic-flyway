@@ -17,6 +17,12 @@ import io.github.joselion.atomicflyway.exceptions.UndoMigrationException;
 import picocli.CommandLine;
 import reactor.core.publisher.Mono;
 
+/**
+ * Internal use only. This class handles the proccess of reverting migrationsa.
+ * 
+ * @author Jose Luis Leon
+ * @since v1.0.0
+ */
 public record UndoMigration() {
 
   private static final Logger log = LogManager.getLogger(UndoMigration.class);
@@ -28,6 +34,13 @@ public record UndoMigration() {
     COMMIT;
     """;
 
+  /**
+   * Static method that given a {@link Flyway} instance reverts the lastest
+   * {@link AtomicMigration} using the down script.
+   *
+   * @param flyway the current Flyway instance
+   * @return a {@link Mono} publisher wrapping the expected exit code
+   */
   public static Mono<Integer> undoLastMigration(final Flyway flyway) {
     return Mono.<String>create(sink ->
       Optional.of(flyway.info())

@@ -12,6 +12,32 @@ import picocli.CommandLine;
 import picocli.CommandLine.Option;
 import reactor.core.publisher.Mono;
 
+/**
+ * This is the public API that allows attaching the atomic Flyway migrations to
+ * your application. It also provides a way for customizating your Flyway
+ * configuration programmatically. The attachment is expoected in the main
+ * method so the execution arguments can be handled.
+ *
+ * <pre>
+ * public class MyAwesomeApp {
+ *
+ *   public static void main (String[] args) {
+ *     AtomicFlyway.configure(config ->
+ *       config
+ *         .baselineOnMigrate(true)
+ *         .batch(true)
+ *         .cleanDisabled(System.getProperty("production", false))
+ *     )
+ *     .attach(args);
+ * 
+ *     // start your app here!
+ *   }
+ * }
+ * </pre>
+ * 
+ * @author Jose Luis Leon
+ * @since v1.0.0
+ */
 public class AtomicFlyway {
 
   @Option(
@@ -57,6 +83,14 @@ public class AtomicFlyway {
     this.flywayConfig = flywayConfig;
   }
 
+  /**
+   * Factory method to create an AtomicFlyway instance. It allows to customize
+   * the Flyway onfiguration using the function parameter, which receives the
+   * default configuration and expect to return a customized configuration.
+   *
+   * @param configurer a function that receives and returns a Flyway configurer
+   * @return a new AtomicFlyway instance
+   */
   public static AtomicFlyway configure(final UnaryOperator<FluentConfiguration> configurer) {
     final var initialConfig = Flyway.configure().envVars();
     final var config = configurer.apply(initialConfig);
@@ -64,10 +98,34 @@ public class AtomicFlyway {
     return new AtomicFlyway(config);
   }
 
+  /**
+   * Factory method to create an AtomicFlyway instance using the default
+   * Flyway configuration.
+   *
+   * @return a new AtomicFlyway instance.
+   */
   public static AtomicFlyway configure() {
     return AtomicFlyway.configure(UnaryOperator.identity());
   }
 
+  /**
+   * Binds the AtomicFlyway CLI to the application. This method is expected to
+   * be called in your main program method so it can receive the execution
+   * arguments to be parsed.
+   * 
+   * <pre>
+   * public class MyAwesomeApp {
+   *
+   *   public static void main (String[] args) {
+   *     AtomicFlyway.configure().attach(args);
+   * 
+   *     // start your app here!
+   *   }
+   * }
+   * </pre>
+   *
+   * @param args the {@code main} method arguments
+   */
   public void attach(final String... args) {
     new CommandLine(this).parseArgs(args);
 
@@ -105,6 +163,11 @@ public class AtomicFlyway {
     }
   }
 
+  /**
+   * Returns the Flyway configuration used to create the instance.
+   *
+   * @return the instance Flyeway configurations
+   */
   public FluentConfiguration getFlywayConfig() {
     return this.flywayConfig;
   }

@@ -21,6 +21,19 @@ java {
     languageVersion = JavaLanguageVersion.of(18)
     vendor = JvmVendorSpec.ORACLE
   }
+
+  withJavadocJar()
+  withSourcesJar()
+}
+
+javadoc {
+  options.addBooleanOption('html5', true)
+
+  title = 'Atomic Flyway'
+  options {
+    addStringOption('Xwerror', '-quiet')
+    tags('apiNote')
+  }
 }
 
 dependencyLocking {
