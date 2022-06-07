@@ -6,8 +6,10 @@ import java.sql.SQLException;
 
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.MigrationVersion;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -20,15 +22,20 @@ import reactor.test.StepVerifier;
 
 @UnitTest class UndoMigrationTest {
 
+  private final FluentConfiguration flywayConfig =  Flyway.configure()
+      .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "");
+
+  @BeforeEach void cleanup() {
+    flywayConfig.load().clean();
+  }
+
   @Nested class undoLastMigration {
     @Nested class when_there_is_no_more_migrations_to_undo {
       @Test void raises_a_UndoMigrationException_error() {
-        final var flyway = Flyway.configure()
-          .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "")
+        final var flyway = flywayConfig
           .javaMigrations()
           .load();
 
-        flyway.clean();
         flyway.migrate();
 
         UndoMigration.undoLastMigration(flyway)
@@ -43,12 +50,10 @@ import reactor.test.StepVerifier;
 
     @Nested class when_the_latest_migration_is_not_an_atomic_migration {
       @Test void raises_a_UndoMigrationException_error() {
-        final var flyway = Flyway.configure()
-          .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "")
+        final var flyway = flywayConfig
           .javaMigrations(new V001__NonAtomicMigration())
           .load();
 
-        flyway.clean();
         flyway.migrate();
 
         UndoMigration.undoLastMigration(flyway)
@@ -63,8 +68,7 @@ import reactor.test.StepVerifier;
 
     @Nested class when_there_are_atomic_migrations_applied {
       @Test void undos_the_latest_applied_migration() throws SQLException {
-        final var flyway = Flyway.configure()
-          .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "")
+        final var flyway = flywayConfig
           .javaMigrations(new V001CreateAccountTable(), new V002AddCreatedAtToAccount())
           .load();
         final var connection = flyway
@@ -72,7 +76,6 @@ import reactor.test.StepVerifier;
           .getDataSource()
           .getConnection();
 
-        flyway.clean();
         flyway.migrate();
 
         final var metadata = connection

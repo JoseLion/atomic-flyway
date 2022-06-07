@@ -13,8 +13,10 @@ import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
 import org.flywaydb.core.api.MigrationVersion;
 import org.flywaydb.core.api.configuration.Configuration;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.flywaydb.core.api.migration.Context;
 import org.h2.jdbc.JdbcSQLSyntaxErrorException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -84,16 +86,23 @@ import io.github.joselion.testing.migrations.V002AddCreatedAtToAccount;
   }
 
   @Nested class migrate {
+
+    private final FluentConfiguration flywayConfig =  Flyway.configure()
+      .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "");
+
+    @BeforeEach void cleanup() {
+      flywayConfig.load().clean();
+    }
+
+
     @Nested class when_the_SQL_statement_can_be_executed {
       @Test void executes_the_statement_with_the_up_migration() throws Exception {
-        final var flyway = Flyway.configure()
-          .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "")
+        final var flyway = flywayConfig
           .javaMigrations(new V001CreateAccountTable())
           .load();
         final var context = getFlywayContext(flyway);
         final var migration = new V002AddCreatedAtToAccount();
 
-        flyway.clean();
         flyway.migrate();
         migration.migrate(context);
 
@@ -107,14 +116,12 @@ import io.github.joselion.testing.migrations.V002AddCreatedAtToAccount;
 
     @Nested class and_the_sql_statement_cannot_be_executed {
       @Test void raises_a_SQLException() throws Exception {
-        final var flyway = Flyway.configure()
-          .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "")
+        final var flyway = flywayConfig
           .javaMigrations(new V001CreateAccountTable(), new V002AddCreatedAtToAccount())
           .load();
         final var context = getFlywayContext(flyway);
         final var migration = new BadMigration();
 
-        flyway.clean();
         flyway.migrate();
         assertThatThrownBy(() -> migration.migrate(context))
           .isExactlyInstanceOf(JdbcSQLSyntaxErrorException.class)
