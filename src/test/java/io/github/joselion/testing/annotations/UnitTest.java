@@ -9,11 +9,11 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import mockit.integration.junit5.JMockitExtension;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@ExtendWith(JMockitExtension.class)
+@ExtendWith(SystemStubsExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public @interface UnitTest {
 
