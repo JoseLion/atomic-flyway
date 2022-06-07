@@ -45,17 +45,25 @@ repositories {
   mavenCentral()
 }
 
-def flywayVersion = '8.5.11'
+def flywayVersion = '8.+'
+def log4jVersion = '2.17.2'
+def reactorVersion = '3.4.18'
 
 dependencies {
   compileOnly("org.flywaydb:flyway-core:$flywayVersion")
 
   implementation('com.github.joselion:maybe:2.1.0')
   implementation('info.picocli:picocli:4.6.3')
+  implementation("io.projectreactor:reactor-core:$reactorVersion")
+  implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
+  implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
 
+  testImplementation('com.h2database:h2:2.1.212')
+  testImplementation("io.projectreactor:reactor-test:$reactorVersion")
   testImplementation('org.assertj:assertj-core:3.22.0')
   testImplementation("org.flywaydb:flyway-core:$flywayVersion")
-  testImplementation('org.jmockit:jmockit:1.49')
+  testImplementation('uk.org.webcompere:system-stubs-core:2.0.1')
+  testImplementation('uk.org.webcompere:system-stubs-jupiter:2.0.1')
 }
 
 testing {
@@ -66,7 +74,7 @@ testing {
       targets {
         all {
           testTask.configure {
-            jvmArgs("-javaagent:${classpath.find { it.name.contains("jmockit") }.absolutePath}")
+            systemProperty("java.security.manager", "allow")
           }
         }
       }

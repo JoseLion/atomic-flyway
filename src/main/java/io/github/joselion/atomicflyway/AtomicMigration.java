@@ -1,7 +1,6 @@
 package io.github.joselion.atomicflyway;
 
 import java.sql.PreparedStatement;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,9 +15,9 @@ import org.flywaydb.core.api.migration.JavaMigration;
 
 public interface AtomicMigration extends JavaMigration {
 
-  Pattern VERSIONED_PATTERN = Pattern.compile("^(V)([0-9]*)([A-Z]\\w*)$");
+  Pattern VERSIONED_PATTERN = Pattern.compile("^(V)([0-9]*)(__)?([A-Z]\\w*)$");
 
-  Pattern REPEATABLE_PATTERN = Pattern.compile("^(R)([0-9]*)([A-Z]\\w*)$");
+  Pattern REPEATABLE_PATTERN = Pattern.compile("^(R)([0-9]*)(__)?([A-Z]\\w*)$");
 
   String up();
 
@@ -36,7 +35,7 @@ public interface AtomicMigration extends JavaMigration {
 
   @Override
   default String getDescription() {
-    return this.nameMatcher().group(3);
+    return this.nameMatcher().group(4);
   }
 
   @Override
@@ -62,11 +61,10 @@ public interface AtomicMigration extends JavaMigration {
 
   @Override
   default void migrate(final Context context) throws Exception {
-    final var statement = this.up();
+    final var connection = context.getConnection();
+    final var statement = connection.prepareStatement(this.up());
 
-    Maybe.just(context.getConnection())
-      .resolve(conn -> conn.prepareStatement(statement))
-      .mapToResource(Function.identity())
+    Maybe.withResource(statement)
       .runEffectClosing(PreparedStatement::execute)
       .orThrow();
   }

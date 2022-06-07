@@ -1,9 +1,12 @@
 package io.github.joselion.atomicflyway;
 
+import com.github.joselion.maybe.Maybe;
+
 import org.flywaydb.core.Flyway;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
+import reactor.core.publisher.Mono;
 
 public class AtomicFlyway {
 
@@ -12,6 +15,12 @@ public class AtomicFlyway {
     description = "Run migrations"
   )
   private boolean migrate;
+
+  @Option(
+    names = {"--undo-migration", "--undo"},
+    description = "Reverts the last applied migration using its down script"
+  )
+  private boolean undoMigration;
 
   @Option(
     names = {"-url"},
@@ -38,13 +47,35 @@ public class AtomicFlyway {
     final var atomicFlyway = new AtomicFlyway();
     new CommandLine(atomicFlyway).parseArgs(args);
 
-    if (atomicFlyway.migrate) {
-      final var flyway = Flyway.configure()
+    final var flywayMono = Mono.<Flyway>create(sink ->
+      Maybe.fromResolver(() -> Flyway.configure()
         .dataSource(atomicFlyway.url, atomicFlyway.user, atomicFlyway.password)
-        .load();
+        .load()
+      )
+      .doOnSuccess(sink::success)
+      .doOnError(sink::error)
+    );
 
-      flyway.migrate();
-      System.exit(CommandLine.ExitCode.OK);
+    if (atomicFlyway.migrate) {
+      flywayMono.flatMap(flyway -> Mono.<Integer>create(sink ->
+        Maybe.fromEffect(flyway::migrate)
+          .doOnSuccess(() -> sink.success(CommandLine.ExitCode.OK))
+          .doOnError(sink::error)
+      ))
+      .subscribe(
+        System::exit,
+        error -> System.exit(CommandLine.ExitCode.USAGE)
+      );
+
+      return;
+    }
+
+    if (atomicFlyway.undoMigration) {
+      flywayMono.flatMap(UndoMigration::undoLastMigration)
+        .subscribe(
+          System::exit,
+          error -> System.exit(CommandLine.ExitCode.USAGE)
+        );
     }
   }
 }
