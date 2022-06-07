@@ -48,6 +48,12 @@ public class AtomicFlyway {
 
   private final FluentConfiguration flywayConfig;
 
+  private final Optional<Runnable> onMigrate;
+
+  private final Optional<Runnable> onUndone;
+
+  private final Optional<Runnable> onComplete;
+
   private AtomicFlyway(final FluentConfiguration flywayConfig) {
     this.migrate = false;
     this.password = "";
@@ -55,6 +61,26 @@ public class AtomicFlyway {
     this.url = Optional.empty();
     this.user = "";
     this.flywayConfig = flywayConfig;
+    this.onMigrate = Optional.empty();
+    this.onUndone = Optional.empty();
+    this.onComplete = Optional.empty();
+  }
+
+  private AtomicFlyway(
+    final FluentConfiguration flywayConfig,
+    final Optional<Runnable> onMigrate,
+    final Optional<Runnable> onUndone,
+    final Optional<Runnable> onComplete
+  ) {
+    this.migrate = false;
+    this.password = "";
+    this.undoMigration = false;
+    this.url = Optional.empty();
+    this.user = "";
+    this.flywayConfig = flywayConfig;
+    this.onMigrate = onMigrate;
+    this.onUndone = onUndone;
+    this.onComplete = onComplete;
   }
 
   public static AtomicFlyway configure(final UnaryOperator<FluentConfiguration> configurer) {
@@ -66,6 +92,33 @@ public class AtomicFlyway {
 
   public static AtomicFlyway configure() {
     return AtomicFlyway.configure(UnaryOperator.identity());
+  }
+
+  public AtomicFlyway onMigrate(final Runnable callback) {
+    return new AtomicFlyway(
+      this.flywayConfig,
+      Optional.of(callback),
+      this.onUndone,
+      this.onComplete
+    );
+  }
+
+  public AtomicFlyway onUndone(final Runnable callback) {
+    return new AtomicFlyway(
+      this.flywayConfig,
+      this.onMigrate,
+      Optional.of(callback),
+      this.onComplete
+    );
+  }
+
+  public AtomicFlyway onComplete(final Runnable callback) {
+    return new AtomicFlyway(
+      this.flywayConfig,
+      this.onMigrate,
+      this.onUndone,
+      Optional.of(callback)
+    );
   }
 
   public void attach(final String... args) {
@@ -88,8 +141,12 @@ public class AtomicFlyway {
           .doOnSuccess(() -> sink.success(CommandLine.ExitCode.OK))
           .doOnError(sink::error)
       ))
+      .doOnNext(exitCode -> this.onMigrate.ifPresent(Runnable::run))
       .subscribe(
-        System::exit,
+        exitCode -> {
+          this.onComplete.ifPresent(Runnable::run);
+          System.exit(exitCode);
+        },
         error -> System.exit(CommandLine.ExitCode.USAGE)
       );
 
@@ -98,8 +155,12 @@ public class AtomicFlyway {
 
     if (this.undoMigration) {
       flywayMono.flatMap(UndoMigration::undoLastMigration)
+        .doOnNext(exitCode -> this.onUndone.ifPresent(Runnable::run))
         .subscribe(
-          System::exit,
+          exitCode -> {
+            this.onComplete.ifPresent(Runnable::run);
+            System.exit(exitCode);
+          },
           error -> System.exit(CommandLine.ExitCode.USAGE)
         );
     }
