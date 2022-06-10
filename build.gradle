@@ -7,14 +7,19 @@ buildscript {
 plugins {
   id 'checkstyle'
   id 'java-library'
+  id 'maven-publish'
+  id 'signing'
 
+  id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
   id 'io.github.joselion.pretty-jupiter' version '2.0.1'
   id 'io.github.joselion.strict-null-check' version '2.0.0'
   id 'se.solrike.sonarlint' version '1.0.0-beta.4'
 }
 
+def suffix = project.hasProperty('releaseVersion') ? '' : '-SNAPSHOT'
+
 group = 'io.github.joselion'
-version = '1.0.0-SNAPSHOT'
+version = "1.0.0$suffix"
 
 java {
   toolchain {
@@ -33,6 +38,16 @@ javadoc {
   options {
     addStringOption('Xwerror', '-quiet')
     tags('apiNote')
+  }
+}
+
+jar {
+  from sourceSets.main.allSource
+  manifest {
+    attributes(
+      'Implementation-Title': project.name,
+      'Implementation-Version': project.version
+    )
   }
 }
 
@@ -92,5 +107,55 @@ testing {
         }
       }
     }
+  }
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from(components.java)
+
+      pom {
+        name = 'atomic-flyway'
+        packaging = 'jar'
+        description = """
+          A wrapper around Flyway to make your migration atomic. That is to say, \
+          it provides a revert mechanism that is set in place by design every \
+          time you write a migration.
+          """
+        url = 'https://github.com/JoseLion/atomic-flyway'
+
+        scm {
+          connection = 'scm:git:https://github.com/JoseLion/atomic-flyway.git'
+          developerConnection = 'scm:git:ssh://github.com/JoseLion/atomic-flyway.git'
+          url = 'https://github.com/joselion/atomic-flyway'
+        }
+
+        licenses {
+          license {
+            name = 'Apache License 2.0'
+            url = 'https://github.com/JoseLion/atomic-flyway/blob/main/LICENSE'
+          }
+        }
+
+        developers {
+          developer {
+            id = 'JoseLion'
+            name = "Jose Luis Leon"
+            email = 'joseluis5000l@gmail.com'
+          }
+        }
+      }
+    }
+  }
+}
+
+signing {
+  sign(publishing.publications.mavenJava)
+}
+
+nexusPublishing {
+  repositories {
+    sonatype()
   }
 }

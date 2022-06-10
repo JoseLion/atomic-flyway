@@ -1,6 +1,8 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
+io.github.gradle-nexus.publish-plugin:io.github.gradle-nexus.publish-plugin.gradle.plugin:1.1.0=classpath
+io.github.gradle-nexus:publish-plugin:1.1.0=classpath
 io.github.joselion.pretty-jupiter:io.github.joselion.pretty-jupiter.gradle.plugin:2.0.1=classpath
 io.github.joselion.strict-null-check:io.github.joselion.strict-null-check.gradle.plugin:2.0.0=classpath
 io.github.joselion:pretty-jupiter:2.0.1=classpath
