@@ -46,4 +46,4 @@ org.reflections:reflections:0.10.2=checkstyle
 org.xmlresolver:xmlresolver:4.2.0=checkstyle
 uk.org.webcompere:system-stubs-core:2.0.1=testCompileClasspath,testRuntimeClasspath
 uk.org.webcompere:system-stubs-jupiter:2.0.1=testCompileClasspath,testRuntimeClasspath
-empty=annotationProcessor,sonarlint,sonarlintPlugins,testAnnotationProcessor
+empty=annotationProcessor,signatures,sonarlint,sonarlintPlugins,testAnnotationProcessor
