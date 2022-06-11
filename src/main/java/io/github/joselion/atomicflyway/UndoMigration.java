@@ -87,10 +87,6 @@ public record UndoMigration() {
       )
     )
     .map(result -> CommandLine.ExitCode.OK)
-    .doOnSuccess(exitCode -> log.info("🎉 Last migration undone!"))
-    .doOnError(error -> {
-      log.error("❌ Failed to undo last migration...");
-      log.error(error.getMessage());
-    });
+    .doOnSuccess(exitCode -> log.info("🎉 Last migration undone!"));
   }
 }

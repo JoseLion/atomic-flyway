@@ -5,6 +5,8 @@ import java.util.function.UnaryOperator;
 
 import com.github.joselion.maybe.Maybe;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 
@@ -39,6 +41,8 @@ import reactor.core.publisher.Mono;
  * @since v1.0.0
  */
 public class AtomicFlyway {
+
+  private static final Logger log = LogManager.getLogger(AtomicFlyway.class);
 
   @Option(
     names = {"--migrate"},
@@ -148,7 +152,7 @@ public class AtomicFlyway {
       ))
       .subscribe(
         System::exit,
-        error -> System.exit(CommandLine.ExitCode.USAGE)
+        this::handleError
       );
 
       return;
@@ -158,7 +162,7 @@ public class AtomicFlyway {
       flywayMono.flatMap(UndoMigration::undoLastMigration)
         .subscribe(
           System::exit,
-          error -> System.exit(CommandLine.ExitCode.USAGE)
+          this::handleError
         );
     }
   }
@@ -170,5 +174,11 @@ public class AtomicFlyway {
    */
   public FluentConfiguration getFlywayConfig() {
     return this.flywayConfig;
+  }
+
+  private <E extends Throwable> void handleError(final E error) {
+    log.error("❌ Operation failed to complete!");
+    log.error(error.getMessage(), error);
+    System.exit(CommandLine.ExitCode.USAGE);
   }
 }
