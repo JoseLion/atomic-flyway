@@ -107,7 +107,45 @@ jobs:
           name: Build
           command:  ./gradlew build
 
+  publish-snapshot:
+    executor: default
+
+    steps:
+      - install-jvm
+
+      - setup
+
+      - run:
+          name: Publish to Sonatype Snapshot OSSRH
+          command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+
+  publish-release:
+    executor: default
+
+    steps:
+      - install-jvm
+
+      - setup
+
+      - run:
+          name: Publish to Maven Central
+          command: ./gradlew -PreleaseVersion publishToSonatype closeAndReleaseSonatypeStagingRepository
+
 workflows:
   main:
     jobs:
       - build
+
+      - publish-snapshot:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
+
+      - publish-release:
+          requires:
+            - build
+          filters:
+            branches:
+              only: release
