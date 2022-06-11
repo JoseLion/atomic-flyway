@@ -65,6 +65,13 @@ commands:
             - v1-gradle-
 
       - run:
+          name: Provisioning
+          command: |
+            sed -i "s/{SIGNING_PASSWORD}/$SIGNING_PASSWORD/g" gradle.properties
+            sed -i "s/{NEXUS_USERNAME_TOKEN}/$NEXUS_USERNAME_TOKEN/g" gradle.properties
+            sed -i "s/{NEXUS_PASSWORD_TOKEN}/$NEXUS_PASSWORD_TOKEN/g" gradle.properties
+
+      - run:
           name: Dependencies
           command: ./gradlew dependencies
 
