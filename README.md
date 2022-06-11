@@ -138,6 +138,38 @@ Some examples of valid names are:
 - R__PopulateAccounts.java
 - R001PopulateAccounts.java (you can number seeds too if you like)
 
+## Usage with Gradle
+
+For the time being, there's no Gradle plugin for Atomic Flyway, but implementing a task to run it should be pretty straightforward.
+
+```gradle
+task migrate(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  mainClass = 'com.example.myawesomeapp.MyAwesomeApp'
+
+  args(
+    project.hasProperty('undo') ? '--undo-migration' : '--migrate',
+    '-url', System.getenv('DB_URL'),
+    '-user', System.getenv('DB_USER'),
+    '-password', System.getenv('DB_PASSWORD')
+  )
+}
+```
+
+Now executing the migrations is as simple as running the task with Gradle:
+
+```bash
+./gradlew migrate
+```
+
+And if you want to undo the last migration, pass the `undo` project property to the task (with the `-P` prefix):
+
+```bash
+./gradlew migrate -Pundo
+```
+
+> **Note:** As a good practice, try using a [12-Factor Config](https://12factor.net/config) approach instead of environment variables on the database URL and credentials. Using a `.env` file, for instance, will make your project setup much more portable and flexible. Check [dotenv-gradle](https://github.com/uzzu/dotenv-gradle) if you're looking for a good `.env` option.
+
 ## Something's missing?
 
 Suggestions are always welcome! Please create an [issue](https://github.com/JoseLion/atomic-flyway/issues/new) describing the request, feature, or bug. I'll try to look into it as soon as possible 🙂
