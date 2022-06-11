@@ -23,7 +23,7 @@ import reactor.core.publisher.Mono;
  * <pre>
  * public class MyAwesomeApp {
  *
- *   public static void main (String[] args) {
+ *   public static void main(String[] args) {
  *     AtomicFlyway.configure(config ->
  *       config
  *         .baselineOnMigrate(true)
@@ -120,7 +120,7 @@ public class AtomicFlyway {
    * <pre>
    * public class MyAwesomeApp {
    *
-   *   public static void main (String[] args) {
+   *   public static void main(String[] args) {
    *     AtomicFlyway.configure().attach(args);
    * 
    *     // start your app here!
