@@ -15,7 +15,7 @@ import org.flywaydb.core.api.migration.JavaMigration;
 
 /**
  * The AtomicMigration contract allows the creating of Flyway Java-based atomic
- * migrations by implementing the {@code up()} and {@code down} methods.
+ * migrations by implementing the {@code up()} and {@code down()} methods.
  * 
  * @author Jose Luis Leon
  * @since v1.0.0
