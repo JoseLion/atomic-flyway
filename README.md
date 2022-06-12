@@ -1,4 +1,5 @@
-
+[![CircleCI](https://circleci.com/gh/JoseLion/atomic-flyway/tree/main.svg?style=shield)](https://circleci.com/gh/JoseLion/atomic-flyway/tree/main)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.joselion/atomic-flyway.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.joselion%22%20AND%20a:%22atomic-flyway%22)
 
 # Atomic Flyway
 
@@ -24,6 +25,28 @@ As a wrapper around Flyway, the library expects to have `flyway-core` in the cla
 
 - flyway-core v8.+
 - Java 18+
+
+## Install
+
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.joselion/atomic-flyway.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.joselion%22%20AND%20a:%22atomic-flyway%22)
+
+Atomic Flyway is available in [Maven Central](https://mvnrepository.com/artifact/io.github.joselion/atomic-flyway). You can checkout the latest version with the badge above.
+
+**Gradle**
+
+```gradle
+implementation('io.github.joselion:atomic-flyway:x.y.z')
+```
+
+**Maven**
+
+```xml
+<dependency>
+  <groupId>io.github.joselion</groupId>
+  <artifactId>atomic-flyway</artifactId>
+  <version>x.y.z</version>
+</dependency>
+```
 
 ## Usage
 
