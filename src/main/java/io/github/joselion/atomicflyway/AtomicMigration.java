@@ -6,12 +6,12 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
-import com.github.joselion.maybe.Maybe;
-
 import org.flywaydb.core.api.FlywayException;
 import org.flywaydb.core.api.MigrationVersion;
 import org.flywaydb.core.api.migration.Context;
 import org.flywaydb.core.api.migration.JavaMigration;
+
+import io.github.joselion.maybe.Maybe;
 
 /**
  * The AtomicMigration contract allows the creating of Flyway Java-based atomic
@@ -25,12 +25,12 @@ public interface AtomicMigration extends JavaMigration {
   /**
    * Versioned migrations class name pattern
    */
-  Pattern VERSIONED_PATTERN = Pattern.compile("^(V)([0-9]*)(__)?([A-Z]\\w*)$");
+  Pattern VERSIONED_PATTERN = Pattern.compile("^(V)(\\d+)(__)?([A-Z]\\w*)$");
 
   /**
    * Repeatable migrations class name pattern
    */
-  Pattern REPEATABLE_PATTERN = Pattern.compile("^(R)([0-9]*)(__)?([A-Z]\\w*)$");
+  Pattern REPEATABLE_PATTERN = Pattern.compile("^(R)(\\d*)(__)?([A-Z]\\w*)$");
 
   /**
    * The {@code up} migration that will run whith the {@code migrate} command.

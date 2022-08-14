@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
-import com.github.joselion.maybe.Maybe;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.flywaydb.core.Flyway;
@@ -14,6 +12,7 @@ import org.flywaydb.core.api.MigrationInfo;
 import org.flywaydb.core.api.MigrationInfoService;
 
 import io.github.joselion.atomicflyway.exceptions.UndoMigrationException;
+import io.github.joselion.maybe.Maybe;
 import picocli.CommandLine;
 import reactor.core.publisher.Mono;
 
