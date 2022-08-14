@@ -3,13 +3,12 @@ package io.github.joselion.atomicflyway;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
-import com.github.joselion.maybe.Maybe;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 
+import io.github.joselion.maybe.Maybe;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
 import reactor.core.publisher.Mono;

@@ -1,7 +1,6 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
-com.github.joselion:maybe:2.1.0=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 com.google.code.findbugs:jsr305:3.0.2=checkstyle,compileClasspath
 com.google.errorprone:error_prone_annotations:2.11.0=checkstyle
 com.google.guava:failureaccess:1.0.1=checkstyle
@@ -14,6 +13,7 @@ commons-beanutils:commons-beanutils:1.9.4=checkstyle
 commons-codec:commons-codec:1.11=checkstyle
 commons-collections:commons-collections:3.2.2=checkstyle
 info.picocli:picocli:4.6.3=checkstyle,compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+io.github.joselion:maybe:3.0.0=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 io.projectreactor:reactor-core:3.4.18=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 io.projectreactor:reactor-test:3.4.18=testCompileClasspath,testRuntimeClasspath
 net.bytebuddy:byte-buddy-agent:1.11.13=testCompileClasspath,testRuntimeClasspath
@@ -28,7 +28,7 @@ org.apiguardian:apiguardian-api:1.1.2=testCompileClasspath
 org.assertj:assertj-core:3.22.0=testCompileClasspath,testRuntimeClasspath
 org.checkerframework:checker-qual:3.12.0=checkstyle
 org.eclipse.jdt:org.eclipse.jdt.annotation:2.2.600=compileClasspath
-org.flywaydb:flyway-core:8.5.12=compileClasspath,testCompileClasspath,testRuntimeClasspath
+org.flywaydb:flyway-core:8.5.13=compileClasspath,testCompileClasspath,testRuntimeClasspath
 org.javassist:javassist:3.28.0-GA=checkstyle
 org.junit.jupiter:junit-jupiter-api:5.8.2=testCompileClasspath,testRuntimeClasspath
 org.junit.jupiter:junit-jupiter-engine:5.8.2=testRuntimeClasspath

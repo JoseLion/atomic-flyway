@@ -7,8 +7,6 @@ import java.sql.Connection;
 
 import javax.sql.DataSource;
 
-import com.github.joselion.maybe.Maybe;
-
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
 import org.flywaydb.core.api.MigrationVersion;
@@ -20,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import io.github.joselion.maybe.Maybe;
 import io.github.joselion.testing.annotations.UnitTest;
 import io.github.joselion.testing.migrations.V001CreateAccountTable;
 import io.github.joselion.testing.migrations.V002AddCreatedAtToAccount;

@@ -80,8 +80,8 @@ def reactorVersion = '3.4.18'
 dependencies {
   compileOnly("org.flywaydb:flyway-core:$flywayVersion")
 
-  implementation('com.github.joselion:maybe:2.1.0')
   implementation('info.picocli:picocli:4.6.3')
+  implementation('io.github.joselion:maybe:3.0.0')
   implementation("io.projectreactor:reactor-core:$reactorVersion")
   implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
   implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
