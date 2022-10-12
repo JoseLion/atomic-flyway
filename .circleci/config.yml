@@ -12,7 +12,7 @@ executors:
 
 commands:
   install-jdk:
-    description: Install and setup the JVM environmnet
+    description: Install and setup the JDK environmnet
     parameters:
       version:
         description: The JDK version to use
@@ -30,7 +30,7 @@ commands:
           key: v1-<<parameters.version>>-{{ checksum "~/jdk/<<parameters.version>>.sha256" }}
 
       - run:
-          name: Download JDK 18
+          name: Download JDK
           command: |
             if [ ! -f ~/jdk/<<parameters.version>>.tar.gz ]; then
               wget -nc https://download.oracle.com/java/18/latest/<<parameters.version>>_linux-x64_bin.tar.gz -O ~/jdk/<<parameters.version>>.tar.gz
