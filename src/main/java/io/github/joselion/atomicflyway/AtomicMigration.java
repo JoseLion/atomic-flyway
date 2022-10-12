@@ -66,7 +66,13 @@ public interface AtomicMigration extends JavaMigration {
 
   @Override
   default String getDescription() {
-    return this.nameMatcher().group(4);
+    final var className = getClass().getSimpleName();
+    final var repeatableMatcher = REPEATABLE_PATTERN.matcher(className);
+    final var baseDescription = this.nameMatcher().group(4);
+
+    return repeatableMatcher.matches()
+      ? this.nameMatcher().group(2).concat(baseDescription)
+      : baseDescription;
   }
 
   @Override

@@ -42,10 +42,20 @@ import io.github.joselion.testing.migrations.V002AddCreatedAtToAccount;
   }
 
   @Nested class getDescription {
-    @Test void returns_the_name_of_the_migrations_without_the_version_prefix() {
-      final var migration = new V001CreateAccountTable();
+    @Nested class when_the_migration_is_not_repeatable {
+      @Test void returns_the_name_of_the_migrations_without_the_version_prefix() {
+        final var migration = new V001CreateAccountTable();
 
-      assertThat(migration.getDescription()).isEqualTo("CreateAccountTable");
+        assertThat(migration.getDescription()).isEqualTo("CreateAccountTable");
+      }
+    }
+
+    @Nested class when_the_migration_is_repeatable {
+      @Test void returns_the_name_of_the_migrations_including_the_version_prefix() {
+        final var migration = new R001TestSeed();
+
+        assertThat(migration.getDescription()).isEqualTo("001TestSeed");
+      }
     }
   }
 
