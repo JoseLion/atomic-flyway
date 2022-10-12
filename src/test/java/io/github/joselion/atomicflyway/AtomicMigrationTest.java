@@ -68,26 +68,11 @@ import io.github.joselion.testing.migrations.V002AddCreatedAtToAccount;
     }
   }
 
-  @Nested class isUndo {
-    @Test void returns_false_by_default() {
-      final var migration = new V001CreateAccountTable();
-
-      assertThat(migration.isUndo()).isFalse();
-    }
-  }
-
-  @Nested class isBaselineMigration {
-    @Test void returns_false_by_default() {
-      final var migration = new V001CreateAccountTable();
-
-      assertThat(migration.isBaselineMigration()).isFalse();
-    }
-  }
-
   @Nested class migrate {
 
     private final FluentConfiguration flywayConfig =  Flyway.configure()
-      .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "");
+      .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "")
+      .cleanDisabled(false);
 
     @BeforeEach void cleanup() {
       flywayConfig.load().clean();

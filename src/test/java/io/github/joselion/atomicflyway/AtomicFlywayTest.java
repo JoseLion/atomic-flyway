@@ -47,6 +47,7 @@ import uk.org.webcompere.systemstubs.SystemStubs;
 
     private final Flyway flyway = Flyway.configure()
       .dataSource(H2_URL, H2_USER, H2_PASSWORD)
+      .cleanDisabled(false)
       .load();
 
     @BeforeEach void cleanup() {

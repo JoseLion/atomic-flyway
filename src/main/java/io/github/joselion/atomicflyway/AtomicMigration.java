@@ -81,16 +81,6 @@ public interface AtomicMigration extends JavaMigration {
   }
 
   @Override
-  default boolean isUndo() {
-    return false;
-  }
-
-  @Override
-  default boolean isBaselineMigration() {
-    return false;
-  }
-
-  @Override
   default void migrate(final Context context) throws Exception {
     final var connection = context.getConnection();
     final var statement = connection.prepareStatement(this.up());
