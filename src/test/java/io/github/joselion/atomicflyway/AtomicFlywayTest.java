@@ -56,7 +56,7 @@ import uk.org.webcompere.systemstubs.SystemStubs;
 
     @Nested class when_the_url_option_is_not_used {
       @Test void uses_the_configurer_datasource() throws Exception {
-        var exitCode = SystemStubs.catchSystemExit(() ->
+        final var exitCode = SystemStubs.catchSystemExit(() ->
           AtomicFlyway.configure(config -> config.dataSource(H2_URL, H2_USER, H2_PASSWORD))
             .attach("--migrate")
         );
@@ -67,7 +67,7 @@ import uk.org.webcompere.systemstubs.SystemStubs;
 
     @Nested class when_the_url_option_is_used {
       @Test void overrides_the_datasource_connection_with_the_passed_options() throws Exception {
-        var exitCode = SystemStubs.catchSystemExit(() ->
+        final var exitCode = SystemStubs.catchSystemExit(() ->
           AtomicFlyway.configure(config -> config.dataSource(H2_URL, H2_USER, H2_PASSWORD))
             .attach(
               "--migrate",
@@ -78,6 +78,20 @@ import uk.org.webcompere.systemstubs.SystemStubs;
         );
 
         assertThat(exitCode).isEqualTo(CommandLine.ExitCode.USAGE);
+      }
+    }
+
+    @Nested class when_unmatched_options_are_used {
+      @Test void ignores_the_unmatched_options() throws Exception {
+        final var exitCode = SystemStubs.catchSystemExit(() ->
+          AtomicFlyway.configure(config -> config.dataSource(H2_URL, H2_USER, H2_PASSWORD))
+            .attach(
+              "--migrate",
+              "-Dspring.profiles.active=dev"
+            )
+        );
+
+        assertThat(exitCode).isEqualTo(CommandLine.ExitCode.OK);
       }
     }
 

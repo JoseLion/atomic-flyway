@@ -130,7 +130,10 @@ public class AtomicFlyway {
    * @param args the {@code main} method arguments
    */
   public void attach(final String... args) {
-    new CommandLine(this).parseArgs(args);
+    new CommandLine(this)
+      .setStopAtUnmatched(false)
+      .setUnmatchedArgumentsAllowed(true)
+      .parseArgs(args);
 
     final var flywayMono = Mono.<Flyway>create(sink ->
       Maybe.fromResolver(() ->
