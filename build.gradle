@@ -11,16 +11,16 @@ plugins {
   id 'signing'
 
   id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
-  id 'io.github.joselion.pretty-jupiter' version '2.0.1'
-  id 'io.github.joselion.strict-null-check' version '2.0.0'
-  id 'se.solrike.sonarlint' version '1.0.0-beta.5'
+  id 'io.github.joselion.pretty-jupiter' version '2.2.0'
+  id 'io.github.joselion.strict-null-check' version '2.1.0'
+  id 'se.solrike.sonarlint' version '1.0.0-beta.8'
 }
 
 group = 'io.github.joselion'
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(18)
+    languageVersion = JavaLanguageVersion.of(19)
     vendor = JvmVendorSpec.ORACLE
   }
 
@@ -39,7 +39,7 @@ javadoc {
 }
 
 jar {
-  from sourceSets.main.allSource
+  from(sourceSets.main.allSource)
   manifest {
     attributes(
       'Implementation-Title': project.name,
@@ -53,16 +53,17 @@ dependencyLocking {
 }
 
 checkstyle {
-  setToolVersion('10.3.4')
+  setToolVersion('10.6.0')
 }
 
 sonarlint {
   excludeRules = [
+    'java:S107', // Allow constructors with more than 7 parameters
+    'java:S3776', // Allow methods with more than 15 lines
     'java:S4032', // Allow packages only containing `package-info.java`
-    'java:S107' // Allow constructors with more than 7 parameters
   ]
   includeRules = [
-    'java:S4266' // "Stream.collect()" calls should not be redundant
+    'java:S4266', // "Stream.collect()" calls should not be redundant
   ]
 }
 
@@ -72,20 +73,20 @@ repositories {
 
 def flywayVersion = '9.+'
 def log4jVersion = '2.19.0'
-def reactorVersion = '3.4.24'
+def reactorVersion = '3.5.2'
 
 dependencies {
   compileOnly("org.flywaydb:flyway-core:$flywayVersion")
 
-  implementation('info.picocli:picocli:4.6.3')
-  implementation('io.github.joselion:maybe:3.0.1')
+  implementation('info.picocli:picocli:4.7.0')
+  implementation('io.github.joselion:maybe:3.1.0')
   implementation("io.projectreactor:reactor-core:$reactorVersion")
   implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
   implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
 
   testImplementation('com.h2database:h2:2.1.214')
   testImplementation("io.projectreactor:reactor-test:$reactorVersion")
-  testImplementation('org.assertj:assertj-core:3.23.1')
+  testImplementation('org.assertj:assertj-core:3.24.1')
   testImplementation("org.flywaydb:flyway-core:$flywayVersion")
   testImplementation('uk.org.webcompere:system-stubs-core:2.0.1')
   testImplementation('uk.org.webcompere:system-stubs-jupiter:2.0.1')
@@ -94,11 +95,13 @@ dependencies {
 testing {
   suites {
     test {
-      useJUnitJupiter('5.9.1')
+      useJUnitJupiter('5.9.2')
 
       targets {
         all {
           testTask.configure {
+            testLogging.showStandardStreams(false)
+
             systemProperty("java.security.manager", "allow")
           }
         }
