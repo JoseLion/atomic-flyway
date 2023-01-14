@@ -17,11 +17,11 @@ commands:
       major:
         description: The JDK major version to use
         type: string
-        default: "18"
+        default: "19"
       version:
         description: The JDK full version to use
         type: string
-        default: "18.0.2.1"
+        default: "19.0.1"
 
     steps:
       - run:
@@ -70,9 +70,7 @@ commands:
 
       - restore_cache:
           keys:
-            - v1-gradle-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
-            - v1-gradle-{{ checksum "buildscript-gradle.lockfile" }}-
-            - v1-gradle-
+            - v2-gradle-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
 
       - run:
           name: Provisioning
@@ -89,7 +87,7 @@ commands:
           paths:
             - ~/repo/atomic-flyway/.gradle
             - ~/.gradle
-          key: v1-gradle-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
+          key: v2-gradle-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
 
   install-nodejs:
     description: Install NodeJS and Yarn dependencies
