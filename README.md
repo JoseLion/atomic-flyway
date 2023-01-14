@@ -1,5 +1,8 @@
-[![CircleCI](https://circleci.com/gh/JoseLion/atomic-flyway/tree/main.svg?style=shield)](https://circleci.com/gh/JoseLion/atomic-flyway/tree/main)
+[![JoseLion](https://circleci.com/gh/JoseLion/atomic-flyway.svg?style=shield)](https://app.circleci.com/pipelines/github/JoseLion/atomic-flyway)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.joselion/atomic-flyway.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.joselion%22%20AND%20a:%22atomic-flyway%22)
+[![javadoc](https://javadoc.io/badge2/io.github.joselion/atomic-flyway/javadoc.svg)](https://javadoc.io/doc/io.github.joselion/atomic-flyway)
+[![License](https://img.shields.io/github/license/JoseLion/atomic-flyway)](./LICENSE)
+[![Snyk Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/JoseLion/atomic-flyway)](https://snyk.io/)
 
 # Atomic Flyway
 
@@ -191,7 +194,7 @@ And if you want to undo the last migration, pass the `undo` project property to 
 ./gradlew migrate -Pundo
 ```
 
-> **Note:** As a good practice, try using a [12-Factor Config](https://12factor.net/config) approach instead of environment variables on the database URL and credentials. Using a `.env` file, for instance, will make your project setup much more portable and flexible. Check [dotenv-gradle](https://github.com/uzzu/dotenv-gradle) if you're looking for a good `.env` option.
+> **Note:** As a good practice, try using a [12-Factor Config](https://12factor.net/config) approach instead of environment variables on the database URL and credentials. Using a `.env` file, for instance, will make your project setup much more portable and flexible. Check [dotenv-gradle](https://github.com/uzzu/dotenv-gradle) or [gradle-dotenv-plugin](https://github.com/otkmnb2783/gradle-dotenv-plugin) if you're looking for a good `.env` option.
 
 ## Something's missing?
 
