@@ -8,20 +8,9 @@
   "scripts": {
     "release": "semantic-release"
   },
+  "packageManager": "yarn@3.2.4",
   "devDependencies": {
     "gradle-semantic-release-plugin": "^1.7.3",
     "semantic-release": "^19.0.5"
-  },
-  "packageManager": "yarn@3.2.4",
-  "release": {
-    "branches": [
-      "release"
-    ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/github",
-      "gradle-semantic-release-plugin"
-    ]
   }
 }
