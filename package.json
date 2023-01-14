@@ -8,9 +8,9 @@
   "scripts": {
     "release": "semantic-release"
   },
-  "packageManager": "yarn@3.2.4",
+  "packageManager": "yarn@3.3.1",
   "devDependencies": {
-    "gradle-semantic-release-plugin": "^1.7.3",
-    "semantic-release": "^19.0.5"
+    "gradle-semantic-release-plugin": "^1.7.6",
+    "semantic-release": "^20.0.2"
   }
 }
