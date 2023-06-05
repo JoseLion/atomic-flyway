@@ -158,26 +158,72 @@ import uk.org.webcompere.systemstubs.SystemStubs;
     }
 
     @Nested class undoMigration {
+
+      private final Flyway flyway = Flyway.configure()
+        .dataSource(H2_URL, H2_USER, H2_PASSWORD)
+        .javaMigrations(new V001CreateAccountTable(), new V002AddCreatedAtToAccount())
+        .cleanDisabled(false)
+        .load();
+
+      @BeforeEach void cleanup() {
+        flyway.clean();
+      }
+
       @Nested class when_the_undo_migration_option_is_passed {
-        @Test void runs_undoLastMigration() throws Exception {
-          final var flyway = Flyway.configure()
-            .dataSource(H2_URL, H2_USER, H2_PASSWORD)
-            .javaMigrations(new V001CreateAccountTable(), new V002AddCreatedAtToAccount())
-            .load();
+        @Nested class and_no_parameter_is_specified {
+          @Test void runs_undoLastMigration_on_the_last_migration_only() throws Exception {
+            flyway.migrate();
 
-          flyway.migrate();
+            final var exitCode = SystemStubs.catchSystemExit(() ->
+              AtomicFlyway.configure()
+                .attach(
+                  "--undo-migration",
+                  "-url", H2_URL,
+                  "-user", H2_USER,
+                  "-password", H2_PASSWORD
+                )
+            );
 
-          final var exitCode = SystemStubs.catchSystemExit(() ->
-            AtomicFlyway.configure()
-              .attach(
-                "--undo-migration",
-                "-url", H2_URL,
-                "-user", H2_USER,
-                "-password", H2_PASSWORD
-              )
-          );
+            assertThat(exitCode).isEqualTo(CommandLine.ExitCode.OK);
 
-          assertThat(exitCode).isEqualTo(CommandLine.ExitCode.OK);
+            final var result = flyway.getConfiguration()
+              .getDataSource()
+              .getConnection()
+              .createStatement()
+              .executeQuery("SELECT count(*) FROM \"flyway_schema_history\";");
+
+            result.next();
+
+            assertThat(result.getInt("COUNT(*)")).isEqualTo(2);
+          }
+        }
+
+        @Nested class and_a_parameter_is_specified {
+          @Test void runs_undoLastMigration_on_the_number_of_migrations_passed() throws Exception {
+            flyway.migrate();
+
+            final var exitCode = SystemStubs.catchSystemExit(() ->
+              AtomicFlyway.configure()
+                .attach(
+                  "--undo=2",
+                  "-url", H2_URL,
+                  "-user", H2_USER,
+                  "-password", H2_PASSWORD
+                )
+            );
+
+            assertThat(exitCode).isEqualTo(CommandLine.ExitCode.OK);
+
+            final var result = flyway.getConfiguration()
+              .getDataSource()
+              .getConnection()
+              .createStatement()
+              .executeQuery("SELECT count(*) FROM \"flyway_schema_history\";");
+
+            result.next();
+
+            assertThat(result.getInt("COUNT(*)")).isEqualTo(1);
+          }
         }
       }
     }

@@ -51,9 +51,14 @@ public class AtomicFlyway {
 
   @Option(
     names = {"--undo-migration", "--undo"},
-    description = "Reverts the last applied migration using its down script"
+    description =
+      "Reverts the last N applied migration(s) using their down script. Use an " +
+      "integer parameter to specify the number of migrations to undo. Defaults " +
+      "to 1 if the parameter is ommited.",
+    arity = "0..1",
+    fallbackValue = "1"
   )
-  private boolean undoMigration;
+  private Optional<Integer> undoMigration;
 
   @Option(
     names = {"-url"},
@@ -80,7 +85,7 @@ public class AtomicFlyway {
   private AtomicFlyway(final FluentConfiguration flywayConfig) {
     this.migrate = false;
     this.password = "";
-    this.undoMigration = false;
+    this.undoMigration = Optional.empty();
     this.url = Optional.empty();
     this.user = "";
     this.flywayConfig = flywayConfig;
@@ -160,8 +165,15 @@ public class AtomicFlyway {
       return;
     }
 
-    if (this.undoMigration) {
-      flywayMono.flatMap(UndoMigration::undoLastMigration)
+    if (this.undoMigration.isPresent()) {
+      flywayMono
+        .flatMap(UndoMigration::undoLastMigration)
+        .repeat(this.undoMigration.get() - 1)
+        .reduce((acc, exitCode) ->
+          exitCode != CommandLine.ExitCode.OK
+            ? exitCode
+            : acc
+        )
         .subscribe(
           System::exit,
           this::handleError
