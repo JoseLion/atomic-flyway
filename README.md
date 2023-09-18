@@ -1,8 +1,10 @@
-[![JoseLion](https://circleci.com/gh/JoseLion/atomic-flyway.svg?style=shield)](https://app.circleci.com/pipelines/github/JoseLion/atomic-flyway)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.joselion/atomic-flyway.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.joselion%22%20AND%20a:%22atomic-flyway%22)
+[![CI](https://github.com/JoseLion/atomic-flyway/actions/workflows/ci.yml/badge.svg)](https://github.com/JoseLion/atomic-flyway/actions/workflows/ci.yml)
+[![Release](https://github.com/JoseLion/atomic-flyway/actions/workflows/release.yml/badge.svg)](https://github.com/JoseLion/atomic-flyway/actions/workflows/release.yml)
+[![Pages](https://github.com/JoseLion/atomic-flyway/actions/workflows/pages.yml/badge.svg)](https://github.com/JoseLion/atomic-flyway/actions/workflows/pages.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.joselion/atomic-flyway?logo=sonatype)](https://central.sonatype.com/artifact/io.github.joselion/atomic-flyway)
 [![javadoc](https://javadoc.io/badge2/io.github.joselion/atomic-flyway/javadoc.svg)](https://javadoc.io/doc/io.github.joselion/atomic-flyway)
-[![License](https://img.shields.io/github/license/JoseLion/atomic-flyway)](./LICENSE)
-[![Snyk Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/JoseLion/atomic-flyway)](https://snyk.io/)
+[![License](https://img.shields.io/github/license/JoseLion/atomic-flyway)](https://github.com/JoseLion/atomic-flyway/blob/main/LICENSE)
+[![Known Vulnerabilities](https://snyk.io/test/github/JoseLion/atomic-flyway/badge.svg)](https://snyk.io/test/github/JoseLion/atomic-flyway)
 
 # Atomic Flyway
 
@@ -31,9 +33,9 @@ As a wrapper around Flyway, the library expects to have `flyway-core` in the cla
 
 ## Install
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.joselion/atomic-flyway.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.joselion%22%20AND%20a:%22atomic-flyway%22)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.joselion/atomic-flyway?logo=sonatype)](https://central.sonatype.com/artifact/io.github.joselion/atomic-flyway)
 
-Atomic Flyway is available in [Maven Central](https://mvnrepository.com/artifact/io.github.joselion/atomic-flyway). You can checkout the latest version with the badge above.
+Atomic Flyway is available in [Maven Central](https://central.sonatype.com/artifact/io.github.joselion/atomic-flyway). You can checkout the latest version with the badge above.
 
 **Gradle**
 
