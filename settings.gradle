@@ -1,1 +1,27 @@
 rootProject.name = 'atomic-flyway'
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      version('checkstyle', '10.12.0')
+      version('log4j', '2.20.0')
+      version('junit', '5.9.3')
+      version('reactor', '3.5.6')
+      version('system-stubs', '2.0.2')
+
+      library('assertj-core', 'org.assertj', 'assertj-core').version('3.24.2')
+      library('flyway-core', 'org.flywaydb', 'flyway-core').version('[9.0.0,]')
+      library('h2', 'com.h2database', 'h2').version('2.1.214')
+      library('log4j-api', 'org.apache.logging.log4j', 'log4j-api').versionRef('log4j')
+      library('log4j-core', 'org.apache.logging.log4j', 'log4j-core').versionRef('log4j')
+      library('maybe', 'io.github.joselion', 'maybe').version('3.2.0')
+      library('picocli', 'info.picocli', 'picocli').version('4.7.4')
+      library('reactor-core', 'io.projectreactor', 'reactor-core').versionRef('reactor')
+      library('reactor-test', 'io.projectreactor', 'reactor-test').versionRef('reactor')
+      library('systemStubs-core', 'uk.org.webcompere', 'system-stubs-core').versionRef('system-stubs')
+      library('systemStubs-jupiter', 'uk.org.webcompere', 'system-stubs-jupiter').versionRef('system-stubs')
+
+      bundle('log4j', ['log4j-api', 'log4j-core'])
+    }
+  }
+}
