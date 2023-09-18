@@ -151,14 +151,18 @@ publishing {
 }
 
 signing {
+  def signingKey = findProperty("signingKey")
+  def signingPassword = findProperty("signingPassword")
+
+  useInMemoryPgpKeys(signingKey, signingPassword)
   sign(publishing.publications.mavenJava)
 }
 
 nexusPublishing {
   repositories {
     sonatype {
-      nexusUrl.set(uri('https://s01.oss.sonatype.org/service/local/'))
-      snapshotRepositoryUrl.set(uri('https://s01.oss.sonatype.org/content/repositories/snapshots/'))
+      nexusUrl = uri('https://s01.oss.sonatype.org/service/local/')
+      snapshotRepositoryUrl = uri('https://s01.oss.sonatype.org/content/repositories/snapshots/')
     }
   }
 }
