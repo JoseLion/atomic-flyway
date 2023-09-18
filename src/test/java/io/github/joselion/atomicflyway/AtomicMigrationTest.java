@@ -80,14 +80,13 @@ import io.github.joselion.testing.migrations.V002AddCreatedAtToAccount;
 
   @Nested class migrate {
 
-    private final FluentConfiguration flywayConfig =  Flyway.configure()
+    private final FluentConfiguration flywayConfig = Flyway.configure()
       .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "")
       .cleanDisabled(false);
 
     @BeforeEach void cleanup() {
       flywayConfig.load().clean();
     }
-
 
     @Nested class when_the_SQL_statement_can_be_executed {
       @Test void executes_the_statement_with_the_up_migration() throws Exception {

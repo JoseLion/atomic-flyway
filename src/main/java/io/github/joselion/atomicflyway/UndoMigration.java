@@ -54,7 +54,7 @@ public record UndoMigration() {
         Maybe.just(script)
           .resolve(x -> flyway.getConfiguration().getClassLoader().loadClass(x))
           .doOnError(sink::error)
-          .resolve(loaded ->  loaded.getDeclaredConstructor().newInstance())
+          .resolve(loaded -> loaded.getDeclaredConstructor().newInstance())
           .map(migration -> {
             if (migration instanceof final AtomicMigration atomicMigration) {
               log.info("💣 Reverting last migration...");
