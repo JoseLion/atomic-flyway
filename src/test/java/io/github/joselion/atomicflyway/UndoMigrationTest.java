@@ -22,7 +22,7 @@ import reactor.test.StepVerifier;
 
 @UnitTest class UndoMigrationTest {
 
-  private final FluentConfiguration flywayConfig =  Flyway.configure()
+  private final FluentConfiguration flywayConfig = Flyway.configure()
       .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "")
       .cleanDisabled(false);
 
