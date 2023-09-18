@@ -5,14 +5,13 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.MigrationInfo;
 import org.flywaydb.core.api.MigrationInfoService;
 
 import io.github.joselion.atomicflyway.exceptions.UndoMigrationException;
 import io.github.joselion.maybe.Maybe;
+import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 import reactor.core.publisher.Mono;
 
@@ -22,9 +21,8 @@ import reactor.core.publisher.Mono;
  * @author Jose Luis Leon
  * @since v1.0.0
  */
+@Slf4j
 public record UndoMigration() {
-
-  private static final Logger log = LogManager.getLogger(UndoMigration.class);
 
   private static final String DELETE_TEMPLATE = """
     BEGIN;

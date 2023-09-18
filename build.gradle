@@ -72,12 +72,14 @@ repositories {
 }
 
 dependencies {
+  annotationProcessor(libs.lombok)
   compileOnly(libs.flyway.core)
+  compileOnly(libs.lombok)
 
-  implementation(libs.bundles.log4j)
   implementation(libs.maybe)
   implementation(libs.picocli)
   implementation(libs.reactor.core)
+  implementation(libs.slf4j.api)
 }
 
 testing {
@@ -86,6 +88,9 @@ testing {
       useJUnitJupiter(libs.versions.junit.get())
 
       dependencies {
+        annotationProcessor(libs.lombok)
+        compileOnly(libs.lombok)
+
         implementation(libs.assertj.core)
         implementation(libs.flyway.core)
         implementation(libs.h2)
