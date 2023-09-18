@@ -3,12 +3,11 @@ package io.github.joselion.atomicflyway;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 
 import io.github.joselion.maybe.Maybe;
+import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
 import reactor.core.publisher.Mono;
@@ -39,9 +38,8 @@ import reactor.core.publisher.Mono;
  * @author Jose Luis Leon
  * @since v1.0.0
  */
+@Slf4j
 public class AtomicFlyway {
-
-  private static final Logger log = LogManager.getLogger(AtomicFlyway.class);
 
   @Option(
     names = {"--migrate"},
@@ -168,7 +166,7 @@ public class AtomicFlyway {
     if (this.undoMigration.isPresent()) {
       flywayMono
         .flatMap(UndoMigration::undoLastMigration)
-        .repeat(this.undoMigration.get() - 1)
+        .repeat(this.undoMigration.get() - 1L)
         .reduce((acc, exitCode) ->
           exitCode != CommandLine.ExitCode.OK
             ? exitCode
