@@ -7,6 +7,7 @@ dependencyResolutionManagement {
       version('log4j', '2.20.0')
       version('junit', '5.9.3')
       version('reactor', '3.5.6')
+      version('sonarlint-core', '9.2.0.74516')
       version('system-stubs', '2.0.2')
 
       library('assertj-core', 'org.assertj', 'assertj-core').version('3.24.2')
@@ -18,8 +19,10 @@ dependencyResolutionManagement {
       library('reactor-core', 'io.projectreactor', 'reactor-core').versionRef('reactor')
       library('reactor-test', 'io.projectreactor', 'reactor-test').versionRef('reactor')
       library('slf4j-api', 'org.slf4j', 'slf4j-api').version('[2.0.0,)')
+      library('sonarlint-java', 'org.sonarsource.java', 'sonar-java-plugin').version('7.24.0.32100')
       library('systemStubs-core', 'uk.org.webcompere', 'system-stubs-core').versionRef('system-stubs')
       library('systemStubs-jupiter', 'uk.org.webcompere', 'system-stubs-jupiter').versionRef('system-stubs')
+      library('tomcat-jasper', 'org.apache.tomcat.embed', 'tomcat-embed-jasper').version('9.0.80')
     }
   }
 }
