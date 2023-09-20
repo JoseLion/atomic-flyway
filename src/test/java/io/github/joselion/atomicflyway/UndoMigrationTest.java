@@ -22,9 +22,10 @@ import reactor.test.StepVerifier;
 
 @UnitTest class UndoMigrationTest {
 
-  private final FluentConfiguration flywayConfig = Flyway.configure()
-      .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "")
-      .cleanDisabled(false);
+  private final FluentConfiguration flywayConfig = Flyway
+    .configure()
+    .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "")
+    .cleanDisabled(false);
 
   @BeforeEach void cleanup() {
     flywayConfig.load().clean();
@@ -39,7 +40,8 @@ import reactor.test.StepVerifier;
 
         flyway.migrate();
 
-        UndoMigration.undoLastMigration(flyway)
+        UndoMigration
+          .undoLastMigration(flyway)
           .as(StepVerifier::create)
           .verifyErrorSatisfies(error -> {
             assertThat(error)
@@ -57,7 +59,8 @@ import reactor.test.StepVerifier;
 
         flyway.migrate();
 
-        UndoMigration.undoLastMigration(flyway)
+        UndoMigration
+          .undoLastMigration(flyway)
           .as(StepVerifier::create)
           .verifyErrorSatisfies(error ->
             assertThat(error)
@@ -90,7 +93,8 @@ import reactor.test.StepVerifier;
         assertThat(metadata.getColumnLabel(3)).isEqualToIgnoringCase("password");
         assertThat(metadata.getColumnLabel(4)).isEqualToIgnoringCase("created_at");
 
-        UndoMigration.undoLastMigration(flyway)
+        UndoMigration
+          .undoLastMigration(flyway)
           .as(StepVerifier::create)
           .expectNext(CommandLine.ExitCode.OK)
           .verifyComplete();

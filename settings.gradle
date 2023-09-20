@@ -16,6 +16,7 @@ dependencyResolutionManagement {
       library('maybe', 'io.github.joselion', 'maybe').version('3.3.1')
       library('picocli', 'info.picocli', 'picocli').version('4.7.5')
       library('reactor-core', 'io.projectreactor', 'reactor-core').versionRef('reactor')
+      library('reactor-extra', 'io.projectreactor.addons', 'reactor-extra').version('3.5.1')
       library('reactor-test', 'io.projectreactor', 'reactor-test').versionRef('reactor')
       library('slf4j-api', 'org.slf4j', 'slf4j-api').version('[2.0.0,)')
       library('sonarlint-java', 'org.sonarsource.java', 'sonar-java-plugin').version('7.24.0.32100')

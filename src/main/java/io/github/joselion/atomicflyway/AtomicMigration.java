@@ -90,7 +90,8 @@ public interface AtomicMigration extends JavaMigration {
     final var connection = context.getConnection();
     final var statement = connection.prepareStatement(this.up());
 
-    Maybe.withResource(statement)
+    Maybe
+      .withResource(statement)
       .runEffectClosing(PreparedStatement::execute)
       .orThrow();
   }

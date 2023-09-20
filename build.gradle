@@ -105,6 +105,7 @@ dependencies {
   implementation(libs.maybe)
   implementation(libs.picocli)
   implementation(libs.reactor.core)
+  implementation(libs.reactor.extra)
   implementation(libs.slf4j.api)
 }
 
