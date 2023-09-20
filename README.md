@@ -26,10 +26,10 @@ Atomic Migrations keep the migration and undo scripts (called `up` and `down`) i
 
 ## Requirements
 
-As a wrapper around Flyway, the library expects to have `flyway-core` in the classpath. Also, at the moment of writing the library, Java's latest version was Java 18, which is the version used to write the library and the minimum required.
+Because the library works with Flyway, it needs to have [flyway-core]() in the classpath. Also, as of version `v1.3.0` the minimum required JDK version is JDK16. Previous versions were built with a higher level (JDK18+) so the should still work on newer JDKs.
 
+- Java 16+
 - flyway-core v8.+
-- Java 18+
 
 ## Install
 
@@ -104,14 +104,15 @@ Given that the library is a wrapper of Flyway, you can use everything that Flywa
 public class MyAwesomeApplication {
 
   public static void main(final String[] args) {
-    AtomicFlyway.configure(config ->
-      config
-        .dataSource(Secrets.DB_URL, Secrets.DB_USER, Secrets.DB_PASS)
-        .baselineOnMigrate(true)
-        .batch(true)
-        .cleanDisabled(System.getProperty("production", false))
-    )
-    .attach(args);
+    AtomicFlyway
+      .configure(config ->
+        config
+          .dataSource(Secrets.DB_URL, Secrets.DB_USER, Secrets.DB_PASS)
+          .baselineOnMigrate(true)
+          .batch(true)
+          .cleanDisabled(System.getProperty("production", false))
+      )
+      .attach(args);
 
     // start your app here!
   }
