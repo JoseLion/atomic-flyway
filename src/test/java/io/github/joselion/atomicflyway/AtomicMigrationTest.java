@@ -80,7 +80,8 @@ import io.github.joselion.testing.migrations.V002AddCreatedAtToAccount;
 
   @Nested class migrate {
 
-    private final FluentConfiguration flywayConfig = Flyway.configure()
+    private final FluentConfiguration flywayConfig = Flyway
+      .configure()
       .dataSource("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "")
       .cleanDisabled(false);
 
@@ -99,7 +100,8 @@ import io.github.joselion.testing.migrations.V002AddCreatedAtToAccount;
         flyway.migrate();
         migration.migrate(context);
 
-        final var result = context.getConnection()
+        final var result = context
+          .getConnection()
           .createStatement()
           .executeQuery("SELECT * FROM account;");
 
@@ -171,7 +173,8 @@ import io.github.joselion.testing.migrations.V002AddCreatedAtToAccount;
 
       @Override
       public Connection getConnection() {
-        return Maybe.just(this.getConfiguration())
+        return Maybe
+          .just(this.getConfiguration())
           .map(Configuration::getDataSource)
           .resolve(DataSource::getConnection)
           .orThrow(RuntimeException::new);

@@ -45,7 +45,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
 
   @Nested class attach {
 
-    private final Flyway flyway = Flyway.configure()
+    private final Flyway flyway = Flyway
+      .configure()
       .dataSource(H2_URL, H2_USER, H2_PASSWORD)
       .cleanDisabled(false)
       .load();
@@ -57,7 +58,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
     @Nested class when_the_url_option_is_not_used {
       @Test void uses_the_configurer_datasource() throws Exception {
         final var exitCode = SystemStubs.catchSystemExit(() ->
-          AtomicFlyway.configure(config -> config.dataSource(H2_URL, H2_USER, H2_PASSWORD))
+          AtomicFlyway
+            .configure(config -> config.dataSource(H2_URL, H2_USER, H2_PASSWORD))
             .attach("--migrate")
         );
 
@@ -68,7 +70,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
     @Nested class when_the_url_option_is_used {
       @Test void overrides_the_datasource_connection_with_the_passed_options() throws Exception {
         final var exitCode = SystemStubs.catchSystemExit(() ->
-          AtomicFlyway.configure(config -> config.dataSource(H2_URL, H2_USER, H2_PASSWORD))
+          AtomicFlyway
+            .configure(config -> config.dataSource(H2_URL, H2_USER, H2_PASSWORD))
             .attach(
               "--migrate",
               "-url", "bad_url",
@@ -84,7 +87,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
     @Nested class when_unmatched_options_are_used {
       @Test void ignores_the_unmatched_options() throws Exception {
         final var exitCode = SystemStubs.catchSystemExit(() ->
-          AtomicFlyway.configure(config -> config.dataSource(H2_URL, H2_USER, H2_PASSWORD))
+          AtomicFlyway
+            .configure(config -> config.dataSource(H2_URL, H2_USER, H2_PASSWORD))
             .attach(
               "--migrate",
               "-Dspring.profiles.active=dev"
@@ -98,7 +102,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
     @Nested class migrate {
       @Nested class when_the_migrate_option_is_passed {
         @Test void runs_flyway_migrations() throws Exception {
-          final var connection = flyway.getConfiguration()
+          final var connection = flyway
+            .getConfiguration()
             .getDataSource()
             .getConnection();
 
@@ -111,7 +116,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
           .hasMessageStartingWith("Table \"flyway_schema_history\" not found (this database is empty)");
 
           final var exitCode = SystemStubs.catchSystemExit(() ->
-            AtomicFlyway.configure()
+            AtomicFlyway
+              .configure()
               .attach(
                 "--migrate",
                 "-url", H2_URL,
@@ -135,7 +141,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
 
       @Nested class when_the_migration_options_is_not_passed {
         @Test void does_not_run_flyway_migrations() throws Exception {
-          final var connection = flyway.getConfiguration()
+          final var connection = flyway
+            .getConfiguration()
             .getDataSource()
             .getConnection();
 
@@ -159,7 +166,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
 
     @Nested class undoMigration {
 
-      private final Flyway flyway = Flyway.configure()
+      private final Flyway flyway = Flyway
+        .configure()
         .dataSource(H2_URL, H2_USER, H2_PASSWORD)
         .javaMigrations(new V001CreateAccountTable(), new V002AddCreatedAtToAccount())
         .cleanDisabled(false)
@@ -175,7 +183,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
             flyway.migrate();
 
             final var exitCode = SystemStubs.catchSystemExit(() ->
-              AtomicFlyway.configure()
+              AtomicFlyway
+                .configure()
                 .attach(
                   "--undo-migration",
                   "-url", H2_URL,
@@ -186,7 +195,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
 
             assertThat(exitCode).isEqualTo(CommandLine.ExitCode.OK);
 
-            final var result = flyway.getConfiguration()
+            final var result = flyway
+              .getConfiguration()
               .getDataSource()
               .getConnection()
               .createStatement()
@@ -203,7 +213,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
             flyway.migrate();
 
             final var exitCode = SystemStubs.catchSystemExit(() ->
-              AtomicFlyway.configure()
+              AtomicFlyway
+                .configure()
                 .attach(
                   "--undo=2",
                   "-url", H2_URL,
@@ -214,7 +225,8 @@ import uk.org.webcompere.systemstubs.SystemStubs;
 
             assertThat(exitCode).isEqualTo(CommandLine.ExitCode.OK);
 
-            final var result = flyway.getConfiguration()
+            final var result = flyway
+              .getConfiguration()
               .getDataSource()
               .getConnection()
               .createStatement()

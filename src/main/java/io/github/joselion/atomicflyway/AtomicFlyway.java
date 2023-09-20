@@ -39,7 +39,7 @@ import reactor.core.publisher.Mono;
  * @since v1.0.0
  */
 @Slf4j
-public class AtomicFlyway {
+public final class AtomicFlyway {
 
   @Option(
     names = {"--migrate"},
@@ -139,22 +139,26 @@ public class AtomicFlyway {
       .parseArgs(args);
 
     final var flywayMono = Mono.<Flyway>create(sink ->
-      Maybe.fromResolver(() ->
-        this.url
-          .map(dbUrl -> flywayConfig.dataSource(dbUrl, this.user, this.password))
-          .orElse(flywayConfig)
-          .load()
-      )
-      .doOnSuccess(sink::success)
-      .doOnError(sink::error)
+      Maybe
+        .fromResolver(() ->
+          this.url
+            .map(dbUrl -> flywayConfig.dataSource(dbUrl, this.user, this.password))
+            .orElse(flywayConfig)
+            .load()
+        )
+        .doOnSuccess(sink::success)
+        .doOnError(sink::error)
     );
 
     if (this.migrate) {
-      flywayMono.flatMap(flyway -> Mono.<Integer>create(sink ->
-        Maybe.fromEffect(flyway::migrate)
-          .doOnSuccess(() -> sink.success(CommandLine.ExitCode.OK))
-          .doOnError(sink::error)
-      ))
+      flywayMono.flatMap(flyway ->
+        Mono.<Integer>create(sink ->
+          Maybe
+            .fromEffect(flyway::migrate)
+            .doOnSuccess(() -> sink.success(CommandLine.ExitCode.OK))
+            .doOnError(sink::error)
+        )
+      )
       .subscribe(
         System::exit,
         this::handleError

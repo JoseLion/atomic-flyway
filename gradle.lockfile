@@ -26,6 +26,7 @@ commons-io:commons-io:2.11.0=sonarlintCoreClasspath
 info.picocli:picocli:4.7.4=checkstyle
 info.picocli:picocli:4.7.5=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 io.github.joselion:maybe:3.3.1=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+io.projectreactor.addons:reactor-extra:3.5.1=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 io.projectreactor:reactor-core:3.5.10=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 io.projectreactor:reactor-test:3.5.10=testCompileClasspath,testRuntimeClasspath
 net.bytebuddy:byte-buddy-agent:1.14.7=testCompileClasspath,testRuntimeClasspath
