@@ -19,20 +19,20 @@ plugins {
 group = 'io.github.joselion'
 
 java {
+  sourceCompatibility = JavaLanguageVersion.of(16)
   toolchain {
     languageVersion = JavaLanguageVersion.of(20)
     vendor = JvmVendorSpec.ORACLE
   }
-
   withJavadocJar()
   withSourcesJar()
 }
 
 javadoc {
-  options.addBooleanOption('html5', true)
-
   title = 'Atomic Flyway'
   options {
+    encoding = 'UTF-8'
+    addBooleanOption('html5', true)
     addStringOption('Xwerror', '-quiet')
     tags('apiNote')
   }
@@ -52,10 +52,6 @@ jar {
       'Package': "${project.group}.${project.name}",
     )
   }
-}
-
-dependencyLocking {
-  lockAllConfigurations()
 }
 
 checkstyle {
@@ -85,6 +81,10 @@ strictNullCheck {
     javadoc = '@author Jose Luis Leon'
   }
   source.addEclipse()
+}
+
+dependencyLocking {
+  lockAllConfigurations()
 }
 
 repositories {
