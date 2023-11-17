@@ -174,9 +174,9 @@ import io.github.joselion.testing.migrations.V002AddCreatedAtToAccount;
       @Override
       public Connection getConnection() {
         return Maybe
-          .just(this.getConfiguration())
+          .of(this.getConfiguration())
           .map(Configuration::getDataSource)
-          .resolve(DataSource::getConnection)
+          .solve(DataSource::getConnection)
           .orThrow(RuntimeException::new);
       }
     };
