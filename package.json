@@ -5,12 +5,15 @@
   "repository": "git@github.com:JoseLion/atomic-flyway.git",
   "author": "JoseLion <joseluis5000l@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "21.2.0"
+  },
   "scripts": {
     "release": "semantic-release"
   },
-  "packageManager": "yarn@3.6.3",
+  "packageManager": "yarn@4.0.2",
   "devDependencies": {
     "gradle-semantic-release-plugin": "^1.7.7",
-    "semantic-release": "^22.0.0"
+    "semantic-release": "^22.0.8"
   }
 }

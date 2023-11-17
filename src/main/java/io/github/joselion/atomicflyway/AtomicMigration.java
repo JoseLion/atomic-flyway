@@ -92,7 +92,7 @@ public interface AtomicMigration extends JavaMigration {
 
     Maybe
       .withResource(statement)
-      .runEffectClosing(PreparedStatement::execute)
+      .effect(PreparedStatement::execute)
       .orThrow();
   }
 

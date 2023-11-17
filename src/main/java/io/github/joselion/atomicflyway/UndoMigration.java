@@ -45,11 +45,11 @@ class UndoMigration {
       .zipWhen(script ->
         Mono.<String>create(sink ->
           Maybe
-            .just(script)
-            .resolve(flyway.getConfiguration().getClassLoader()::loadClass)
+            .of(script)
+            .solve(flyway.getConfiguration().getClassLoader()::loadClass)
             .doOnError(sink::error)
-            .resolve(Class::getDeclaredConstructor)
-            .resolve(Constructor::newInstance)
+            .solve(Class::getDeclaredConstructor)
+            .solve(Constructor::newInstance)
             .map(migration -> {
               if (migration instanceof final AtomicMigration atomicMigration) {
                 log.info("💣 Reverting last migration...");
@@ -66,10 +66,10 @@ class UndoMigration {
       .flatMap(statement ->
         Mono.<Boolean>create(sink ->
           Maybe
-            .just(flyway.getConfiguration().getDataSource())
-            .resolve(DataSource::getConnection)
-            .resolve(connection -> connection.prepareStatement(statement))
-            .resolve(PreparedStatement::execute)
+            .of(flyway.getConfiguration().getDataSource())
+            .solve(DataSource::getConnection)
+            .solve(connection -> connection.prepareStatement(statement))
+            .solve(PreparedStatement::execute)
             .doOnSuccess(sink::success)
             .doOnError(sink::error)
         )

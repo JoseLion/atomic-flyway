@@ -1,4 +1,3 @@
----
 name: CI
 
 on:
@@ -18,7 +17,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: oracle
-          java-version: 20
+          java-version: 21
           check-latest: true
           cache: gradle
       - run: ./gradlew compileJava compileTestJava

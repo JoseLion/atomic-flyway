@@ -10,18 +10,18 @@ plugins {
   id('maven-publish')
   id('signing')
 
-  id('io.github.gradle-nexus.publish-plugin') version '2.0.0-rc-1'
-  id('io.github.joselion.pretty-jupiter') version '3.0.1'
-  id('io.github.joselion.strict-null-check') version '3.0.1'
-  id('name.remal.sonarlint') version '3.3.9'
+  alias(libs.plugins.prettyJupiter)
+  alias(libs.plugins.publishPlugin)
+  alias(libs.plugins.sonarlint)
+  alias(libs.plugins.strictNullCheck)
 }
 
 group = 'io.github.joselion'
 
 java {
-  sourceCompatibility = JavaLanguageVersion.of(16)
+  // sourceCompatibility = JavaLanguageVersion.of(16)
   toolchain {
-    languageVersion = JavaLanguageVersion.of(20)
+    languageVersion = JavaLanguageVersion.of(21)
     vendor = JvmVendorSpec.ORACLE
   }
   withJavadocJar()
@@ -76,11 +76,11 @@ sonarLint {
 }
 
 strictNullCheck {
+  addEclipse()
   packageInfo {
     useEclipse()
     javadoc = '@author Jose Luis Leon'
   }
-  source.addEclipse()
 }
 
 dependencyLocking {
@@ -96,11 +96,6 @@ dependencies {
   compileOnly(libs.flyway.core)
   compileOnly(libs.lombok)
   sonarlintCorePlugins(libs.sonarlint.java)
-  constraints {
-    sonarlintCore(libs.tomcat.jasper) {
-      because('version 9.0.75 has a security vulnerability')
-    }
-  }
 
   implementation(libs.maybe)
   implementation(libs.picocli)
@@ -152,7 +147,7 @@ publishing {
           it provides a revert mechanism that is set in place by design every \
           time you write a migration.
           """
-        url = 'https://github.com/JoseLion/atomic-flyway'
+        url = 'https://joselion.github.io/atomic-flyway/'
 
         scm {
           connection = 'scm:git:https://github.com/JoseLion/atomic-flyway.git'

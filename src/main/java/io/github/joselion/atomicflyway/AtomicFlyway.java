@@ -140,7 +140,7 @@ public final class AtomicFlyway {
 
     final var flywayMono = Mono.<Flyway>create(sink ->
       Maybe
-        .fromResolver(() ->
+        .from(() ->
           this.url
             .map(dbUrl -> flywayConfig.dataSource(dbUrl, this.user, this.password))
             .orElse(flywayConfig)
@@ -154,8 +154,8 @@ public final class AtomicFlyway {
       flywayMono.flatMap(flyway ->
         Mono.<Integer>create(sink ->
           Maybe
-            .fromEffect(flyway::migrate)
-            .doOnSuccess(() -> sink.success(CommandLine.ExitCode.OK))
+            .from(flyway::migrate)
+            .doOnSuccess(result -> sink.success(CommandLine.ExitCode.OK))
             .doOnError(sink::error)
         )
       )

@@ -3,26 +3,30 @@ rootProject.name = 'atomic-flyway'
 dependencyResolutionManagement {
   versionCatalogs {
     libs {
-      version('checkstyle', '10.12.3')
-      version('junit', '5.10.0')
-      version('reactor', '3.5.10')
-      version('sonarlint-core', '9.2.0.74516')
-      version('system-stubs', '2.1.1')
+      version('checkstyle', '10.12.5')
+      version('junit', '5.10.1')
+      version('reactor', '3.6.0')
+      version('sonarlint-core', '9.4.1.76128')
+      version('system-stubs', '2.1.5')
+
+      plugin('prettyJupiter', 'io.github.joselion.pretty-jupiter').version('3.1.0')
+      plugin('publishPlugin', 'io.github.gradle-nexus.publish-plugin').version('2.0.0-rc-1')
+      plugin('sonarlint', 'name.remal.sonarlint').version('3.3.15')
+      plugin('strictNullCheck', 'io.github.joselion.strict-null-check').version('3.2.0')
 
       library('assertj-core', 'org.assertj', 'assertj-core').version('3.24.2')
       library('flyway-core', 'org.flywaydb', 'flyway-core').version('[9.0.0,)')
       library('h2', 'com.h2database', 'h2').version('2.2.224')
-      library('lombok', 'org.projectlombok', 'lombok').version('1.18.28')
-      library('maybe', 'io.github.joselion', 'maybe').version('3.3.1')
+      library('lombok', 'org.projectlombok', 'lombok').version('1.18.30')
+      library('maybe', 'io.github.joselion', 'maybe').version('3.4.0')
       library('picocli', 'info.picocli', 'picocli').version('4.7.5')
       library('reactor-core', 'io.projectreactor', 'reactor-core').versionRef('reactor')
       library('reactor-extra', 'io.projectreactor.addons', 'reactor-extra').version('3.5.1')
       library('reactor-test', 'io.projectreactor', 'reactor-test').versionRef('reactor')
       library('slf4j-api', 'org.slf4j', 'slf4j-api').version('[2.0.0,)')
-      library('sonarlint-java', 'org.sonarsource.java', 'sonar-java-plugin').version('7.24.0.32100')
+      library('sonarlint-java', 'org.sonarsource.java', 'sonar-java-plugin').version('7.28.0.33738')
       library('systemStubs-core', 'uk.org.webcompere', 'system-stubs-core').versionRef('system-stubs')
       library('systemStubs-jupiter', 'uk.org.webcompere', 'system-stubs-jupiter').versionRef('system-stubs')
-      library('tomcat-jasper', 'org.apache.tomcat.embed', 'tomcat-embed-jasper').version('9.0.80')
     }
   }
 }
