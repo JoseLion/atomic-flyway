@@ -19,7 +19,7 @@ plugins {
 group = 'io.github.joselion'
 
 java {
-  // sourceCompatibility = JavaLanguageVersion.of(16)
+  sourceCompatibility = JavaLanguageVersion.of(16)
   toolchain {
     languageVersion = JavaLanguageVersion.of(21)
     vendor = JvmVendorSpec.ORACLE
@@ -44,7 +44,6 @@ jar {
     attributes(
       'Build-Jdk': "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
       'Build-Jdk-Spec': java.sourceCompatibility,
-      'Build-Timestamp': LocalDateTime.now().toString(),
       'Created-By': "Gradle ${gradle.gradleVersion}",
       'Implementation-Title': project.name,
       'Implementation-Vendor': 'Jose Luis Leon',
