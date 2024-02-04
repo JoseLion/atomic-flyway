@@ -15,29 +15,28 @@ import io.github.joselion.maybe.Maybe;
 /**
  * The AtomicMigration contract allows the creating of Flyway Java-based atomic
  * migrations by implementing the {@code up()} and {@code down()} methods.
- * 
+ *
  * @author Jose Luis Leon
  * @since v1.0.0
  */
 public interface AtomicMigration extends JavaMigration {
 
   /**
-   * Versioned migrations class name pattern
+   * Versioned migrations class name pattern.
    */
   Pattern VERSIONED_PATTERN = Pattern.compile("^(V)(\\d+)(__)?([A-Z]\\w*)$");
 
   /**
-   * Repeatable migrations class name pattern
+   * Repeatable migrations class name pattern.
    */
   Pattern REPEATABLE_PATTERN = Pattern.compile("^(R)(\\d*)(__)?([A-Z]\\w*)$");
 
   /**
    * The {@code up} migration that will run whith the {@code migrate} command.
-   * 
-   * @apiNote by default, the SQL is executed within a transaction, unless the
-   * {@link JavaMigration#canExecuteInTransaction()} method is overriden.
    *
    * @return a raw string of the SQL to run during upon migration
+   * @apiNote by default, the SQL is executed within a transaction, unless the
+   *          {@link JavaMigration#canExecuteInTransaction()} method is overriden.
    */
   String up();
 
@@ -45,11 +44,10 @@ public interface AtomicMigration extends JavaMigration {
    * The {@code down} migration that will run with the {@code undo-migration}
    * command. Typically, this scripts should effectively revert everything in
    * the {@code up} migration.
-   * 
-   * @apiNote by default, the SQL is executed within a transaction, unless the
-   * {@link JavaMigration#canExecuteInTransaction()} method is overriden.
    *
    * @return a raw string of the SQL to run upon reverting the migration
+   * @apiNote by default, the SQL is executed within a transaction, unless the
+   *          {@link JavaMigration#canExecuteInTransaction()} method is overriden.
    */
   String down();
 
@@ -108,6 +106,7 @@ public interface AtomicMigration extends JavaMigration {
    *   <li>An optional separator (default is {@code __})</li>
    *   <li>The script name</li>
    * </ol>
+   *
    * @return a regex matcher for the migration class name
    */
   default Matcher nameMatcher() {

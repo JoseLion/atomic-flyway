@@ -1,7 +1,7 @@
 package io.github.joselion.atomicflyway;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 import org.flywaydb.core.Flyway;
 import org.h2.jdbc.JdbcSQLSyntaxErrorException;
@@ -102,64 +102,57 @@ import uk.org.webcompere.systemstubs.SystemStubs;
     @Nested class migrate {
       @Nested class when_the_migrate_option_is_passed {
         @Test void runs_flyway_migrations() throws Exception {
-          final var connection = flyway
-            .getConfiguration()
-            .getDataSource()
-            .getConnection();
+          try (
+            var connection = flyway.getConfiguration().getDataSource().getConnection();
+            var statement = connection.createStatement();
+          ) {
+            assertThatCode(() -> statement.executeQuery("SELECT * FROM \"flyway_schema_history\";"))
+              .isExactlyInstanceOf(JdbcSQLSyntaxErrorException.class)
+              .hasMessageStartingWith("Table \"flyway_schema_history\" not found (this database is empty)");
 
-          assertThatThrownBy(() ->
-            connection
-              .createStatement()
-              .executeQuery("SELECT * FROM \"flyway_schema_history\";")
-          )
-          .isExactlyInstanceOf(JdbcSQLSyntaxErrorException.class)
-          .hasMessageStartingWith("Table \"flyway_schema_history\" not found (this database is empty)");
+            final var exitCode = SystemStubs.catchSystemExit(() ->
+              AtomicFlyway
+                .configure()
+                .attach(
+                  "--migrate",
+                  "-url", H2_URL,
+                  "-user", H2_USER,
+                  "-password", H2_PASSWORD
+                )
+            );
 
-          final var exitCode = SystemStubs.catchSystemExit(() ->
-            AtomicFlyway
-              .configure()
-              .attach(
-                "--migrate",
-                "-url", H2_URL,
-                "-user", H2_USER,
-                "-password", H2_PASSWORD
-              )
-          );
+            final var result = statement.executeQuery("SELECT * FROM \"flyway_schema_history\";");
+            result.last();
 
-          final var result = connection
-            .createStatement()
-            .executeQuery("SELECT * FROM \"flyway_schema_history\";");
-
-          result.last();
-
-          assertThat(exitCode).isEqualTo(CommandLine.ExitCode.OK);
-          assertThat(result.getInt("installed_rank")).isEqualTo(-1);
-          assertThat(result.getString("version")).isNull();
-          assertThat(result.getBigDecimal("checksum")).isNull();
+            assertThat(exitCode).isEqualTo(CommandLine.ExitCode.OK);
+            assertThat(result.getInt("installed_rank")).isEqualTo(-1);
+            assertThat(result.getString("version")).isNull();
+            assertThat(result.getBigDecimal("checksum")).isNull();
+          }
         }
       }
 
       @Nested class when_the_migration_options_is_not_passed {
         @Test void does_not_run_flyway_migrations() throws Exception {
-          final var connection = flyway
-            .getConfiguration()
-            .getDataSource()
-            .getConnection();
+          try (
+            var connection = flyway
+              .getConfiguration()
+              .getDataSource()
+              .getConnection();
+            var statement = connection.createStatement();
+          ) {
+            AtomicFlyway
+              .configure()
+              .attach(
+                "-url", H2_URL,
+                "-user", H2_USER,
+                "-password", H2_PASSWORD
+              );
 
-          AtomicFlyway.configure()
-            .attach(
-              "-url", H2_URL,
-              "-user", H2_USER,
-              "-password", H2_PASSWORD
-            );
-
-          assertThatThrownBy(() ->
-            connection
-              .createStatement()
-              .executeQuery("SELECT * FROM \"flyway_schema_history\";")
-          )
-          .isExactlyInstanceOf(JdbcSQLSyntaxErrorException.class)
-          .hasMessageStartingWith("Table \"flyway_schema_history\" not found (this database is empty)");
+            assertThatCode(() -> statement.executeQuery("SELECT * FROM \"flyway_schema_history\";"))
+              .isExactlyInstanceOf(JdbcSQLSyntaxErrorException.class)
+              .hasMessageStartingWith("Table \"flyway_schema_history\" not found (this database is empty)");
+          }
         }
       }
     }

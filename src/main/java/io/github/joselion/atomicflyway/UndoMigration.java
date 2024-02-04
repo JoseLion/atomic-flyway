@@ -14,20 +14,22 @@ import org.flywaydb.core.api.MigrationInfoService;
 
 import io.github.joselion.atomicflyway.exceptions.UndoMigrationException;
 import io.github.joselion.maybe.Maybe;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 import reactor.core.publisher.Mono;
 
 /**
  * Internal use only. This class handles the proccess of reverting migrationsa.
- * 
+ *
  * @author Jose Luis Leon
  * @since v1.0.0
  */
 @Slf4j
-@UtilityClass
-class UndoMigration {
+final class UndoMigration {
+
+  protected UndoMigration() {
+    throw new UnsupportedOperationException("");
+  }
 
   static Mono<Integer> undoLastMigration(final Flyway flyway) {
     return Mono

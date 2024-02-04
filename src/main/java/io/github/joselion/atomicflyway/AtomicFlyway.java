@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
  * configuration programmatically. The attachment is expoected in the main
  * method so the execution arguments can be handled.
  *
- * <pre>
+ * <pre>{@code
  * public class MyAwesomeApp {
  *
  *   public static void main(String[] args) {
@@ -33,8 +33,8 @@ import reactor.core.publisher.Mono;
  *     // start your app here!
  *   }
  * }
- * </pre>
- * 
+ * }</pre>
+ *
  * @author Jose Luis Leon
  * @since v1.0.0
  */
@@ -42,7 +42,7 @@ import reactor.core.publisher.Mono;
 public final class AtomicFlyway {
 
   @Option(
-    names = {"--migrate"},
+    names = "--migrate",
     description = "Run migrations"
   )
   private boolean migrate;
@@ -50,29 +50,29 @@ public final class AtomicFlyway {
   @Option(
     names = {"--undo-migration", "--undo"},
     description =
-      "Reverts the last N applied migration(s) using their down script. Use an " +
-      "integer parameter to specify the number of migrations to undo. Defaults " +
-      "to 1 if the parameter is ommited.",
+      "Reverts the last N applied migration(s) using their down script. Use an "
+      + "integer parameter to specify the number of migrations to undo. Defaults "
+      + "to 1 if the parameter is ommited.",
     arity = "0..1",
     fallbackValue = "1"
   )
   private Optional<Integer> undoMigration;
 
   @Option(
-    names = {"-url"},
+    names = "-url",
     description = "The URL for the database connection"
   )
   private Optional<String> url;
 
   @Option(
-    names = {"-user"},
+    names = "-user",
     description = "The user of the database connection",
     defaultValue = "${user:-}"
   )
   private String user;
 
   @Option(
-    names = {"-password"},
+    names = "-password",
     description = "The password of the database connection",
     defaultValue = ""
   )
@@ -142,8 +142,8 @@ public final class AtomicFlyway {
       Maybe
         .from(() ->
           this.url
-            .map(dbUrl -> flywayConfig.dataSource(dbUrl, this.user, this.password))
-            .orElse(flywayConfig)
+            .map(dbUrl -> this.flywayConfig.dataSource(dbUrl, this.user, this.password))
+            .orElse(this.flywayConfig)
             .load()
         )
         .doOnSuccess(sink::success)
@@ -151,18 +151,19 @@ public final class AtomicFlyway {
     );
 
     if (this.migrate) {
-      flywayMono.flatMap(flyway ->
-        Mono.<Integer>create(sink ->
-          Maybe
-            .from(flyway::migrate)
-            .doOnSuccess(result -> sink.success(CommandLine.ExitCode.OK))
-            .doOnError(sink::error)
+      flywayMono
+        .flatMap(flyway ->
+          Mono.<Integer>create(sink ->
+            Maybe
+              .from(flyway::migrate)
+              .doOnSuccess(result -> sink.success(CommandLine.ExitCode.OK))
+              .doOnError(sink::error)
+          )
         )
-      )
-      .subscribe(
-        System::exit,
-        this::handleError
-      );
+        .subscribe(
+          System::exit,
+          this::handleError
+        );
 
       return;
     }
