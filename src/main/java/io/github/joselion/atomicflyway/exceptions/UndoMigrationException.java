@@ -1,12 +1,12 @@
 package io.github.joselion.atomicflyway.exceptions;
 
 /**
- * Spetialized exception used on the {@code undo-migration} command
- * 
+ * Spetialized exception used on the {@code undo-migration} command.
+ *
  * @author Jose Luis Leon
  * @since v1.0.0
  */
-public class UndoMigrationException extends RuntimeException {
+public final class UndoMigrationException extends RuntimeException {
 
   private UndoMigrationException(final String message) {
     super(message);
