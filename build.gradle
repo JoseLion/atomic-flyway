@@ -75,7 +75,7 @@ sonarLint {
 }
 
 strictNullCheck {
-  addEclipse()
+  addEclipse(libs.versions.eclipse.get())
   packageInfo {
     useEclipse()
     javadoc = '@author Jose Luis Leon'
